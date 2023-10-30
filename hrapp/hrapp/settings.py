@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import json
 import os
 from pathlib import Path
 
@@ -29,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-SITE_ID = 3 # This depends on the site used and may change, default it should be 1
+SITE_ID = 1  # This depends on the site used and may change if additional sites are added, default should be 1
 
 # Application definition
 
@@ -44,7 +43,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.okta'
+    'allauth.socialaccount.providers.google',
 
 ]
 
@@ -95,6 +94,16 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+# Should be moved into a JSON or env variable for production
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '52468962034-m8ndb28t5rsn8hdqmhrdk371g758bmr2.apps.googleusercontent.com',
+            'secret': 'OGCSPX-IsW_6Fz1QD_ESu-viQDwqtjAbtwi',
+        }
+    }
+}
 
 
 # Require email confirmation before allowing login
