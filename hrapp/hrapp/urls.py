@@ -26,4 +26,3 @@ urlpatterns = [
     path('accounts/', include('allauth.account.urls')),
     path('accounts/profile/', views.profile_view, name='account_profile')
 ]
-# test
