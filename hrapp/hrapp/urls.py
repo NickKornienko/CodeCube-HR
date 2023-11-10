@@ -17,12 +17,7 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
-from . import views
 
 urlpatterns = [
-    path('', views.homepage, name='homepage'),
-    path("admin/", admin.site.urls),
-    path('accounts/', include('allauth.urls')),
-    path('accounts/', include('allauth.account.urls')),
-    path('accounts/profile/', views.profile_view, name='account_profile')
+    path("", admin.site.urls),
 ]

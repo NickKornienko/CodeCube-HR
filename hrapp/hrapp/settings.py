@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import os
+import json
+from django.core.exceptions import ImproperlyConfigured
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,31 +21,43 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-b06b*6o_ng_(ll%)v23au(a%x_omfjbgju1*)8spp4r655v+q0"
+# Load secrets from secrets.json
+with open(BASE_DIR / 'secrets.json') as f:
+    secrets = json.load(f)
+
+
+def get_secret(setting, secrets=secrets):
+    """Get the secret variable or return explicit exception."""
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = f'Set the {setting} environment variable'
+        raise ImproperlyConfigured(error_msg)
+
+
+# Set SECRET_KEY
+SECRET_KEY = get_secret('SECRET_KEY')
+
+# Set DATABASES
+DATABASES = get_secret('DATABASES')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-SITE_ID = 1  # This depends on the site used and may change if additional sites are added, default should be 1
 
 # Application definition
 
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
-    'django.contrib.sites',
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-
+    'rest_framework',
+    'hrapp',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +68,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = "hrapp.urls"
@@ -63,7 +75,7 @@ ROOT_URLCONF = "hrapp.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -77,40 +89,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "hrapp.wsgi.application"
-
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
-
-AUTHENTICATION_BACKENDS = [
-    'allauth.account.auth_backends.AuthenticationBackend',
-    'django.contrib.auth.backends.ModelBackend',
-]
-
-# Should be moved into a JSON or env variable for production
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': '52468962034-m8ndb28t5rsn8hdqmhrdk371g758bmr2.apps.googleusercontent.com',
-            'secret': 'OGCSPX-IsW_6Fz1QD_ESu-viQDwqtjAbtwi',
-        }
-    }
-}
-
-
-# Require email confirmation before allowing login
-# ACCOUNT_EMAIL_VERIFICATION = 'mandatory' # Currently disabled
-
-# Send emails to console (replace in production)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Password validation
