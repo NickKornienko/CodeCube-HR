@@ -1,4 +1,3 @@
-import Header from "../../components/Header";
 import { Box, Typography, useTheme} from "@mui/material";
 import { tokens } from "../../theme";
 import InputBase from "@mui/material/InputBase";
