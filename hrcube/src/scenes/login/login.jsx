@@ -7,8 +7,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import ViewInArRoundedIcon from "@mui/icons-material/ViewInArRounded";
 import AuthService from "../../AuthService.js";
 import { Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const theme = useTheme();
@@ -23,7 +22,7 @@ const Login = () => {
   const handleLogin = () => {
     AuthService.login(username, password)
       .then((response) => {
-        navigate('/dashboard');
+        navigate("/");
         console.log("Login successful", response);
       })
       .catch((error) => {

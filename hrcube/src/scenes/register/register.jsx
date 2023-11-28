@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import InputBase from "@mui/material/InputBase";
@@ -8,6 +9,7 @@ import AuthService from "../../AuthService.js";
 const Register = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const navigate = useNavigate();
 
   // State for registration details
   const [username, setUsername] = useState("");
@@ -23,6 +25,7 @@ const Register = () => {
         console.log(response.data);
         setSuccessMsg("Registration successful. Please login.");
         setErrorMsg("");
+        navigate("/login");
       })
       .catch((error) => {
         console.error("Registration failed", error);
