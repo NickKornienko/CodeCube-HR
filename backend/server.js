@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { sequelize } = require("./db"); // Import Sequelize instance
-const authRoutes = require("./auth.routes");
+const authRoutes = require("./auth/auth.routes");
 
 const app = express();
 

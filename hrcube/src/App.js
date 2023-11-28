@@ -1,3 +1,4 @@
+// App.js
 import { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
