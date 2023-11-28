@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, useTheme } from "@mui/material";
-import { tokens } from "../../theme";
+import { tokens } from "../../theme.js";
 import InputBase from "@mui/material/InputBase";
 import Button from "@mui/material/Button";
 import AuthService from "../../AuthService.js";

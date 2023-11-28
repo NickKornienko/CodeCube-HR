@@ -14,8 +14,8 @@ import Geography from "./scenes/geography";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import Organization from "./scenes/organization";
-import Login from "./scenes/login/login";
-import Register from "./scenes/register/register";
+import Login from "./scenes/login";
+import Register from "./scenes/register";
 
 function App() {
   const [theme, colorMode] = useMode();
