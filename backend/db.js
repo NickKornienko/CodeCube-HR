@@ -7,6 +7,6 @@ const sequelize = new Sequelize(secrets.NAME, secrets.USER, secrets.PASSWORD, {
   port: secrets.PORT,
 });
 
-const User = require("./user.model")(sequelize, Sequelize.DataTypes);
+const User = require("./models/user.model")(sequelize, Sequelize.DataTypes);
 
 module.exports = { sequelize, User };
