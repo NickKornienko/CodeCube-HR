@@ -1,4 +1,4 @@
-import { Box, IconButton, useTheme } from "@mui/material";
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useContext } from "react";
 import { ColorModeContext, tokens } from "../../theme";
 import InputBase from "@mui/material/InputBase";
@@ -8,6 +8,10 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
+import MenuIcon from '@mui/icons-material/Menu';
+import Menu from "@mui/icons-material/Menu";
+import MenuItem from '@mui/material/MenuItem';
+import AccountMenu from "../../components/AccountMenu";
 
 const Topbar = () => {
   const theme = useTheme();
@@ -41,6 +45,12 @@ const Topbar = () => {
         <IconButton>
           <PersonOutlinedIcon color="primary" />
         </IconButton>
+        <Box mt="8px" height="100%" justifyContent="center">
+        <Typography color={colors.primary[500]}>
+          John Doe
+        </Typography>
+        </Box>
+        <AccountMenu></AccountMenu>
       </Box>
     </Box>
   );

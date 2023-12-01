@@ -8,40 +8,28 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
-import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-import GridViewIcon from '@mui/icons-material/GridView';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
-import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
-import ViewInArRoundedIcon from '@mui/icons-material/ViewInArRounded';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InputBase from "@mui/material/InputBase";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Bar from "../../scenes/bar";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Icon from '@mui/material/Icon';
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: colors.grey[300],
+    overflow: "hidden",
   }));
-  
+ 
 
   return (
     
@@ -66,6 +54,7 @@ const Dashboard = () => {
         gridTemplateColumns="repeat(12, 1fr)"
         gridAutoRows="140px"
         gap="20px"
+        height="73vh"
       >
         {/* ROW 1 */}
         <Box
@@ -152,13 +141,25 @@ const Dashboard = () => {
               >
                 Timesheet
               </Typography>
+              <Box display="flex" justifyContent="space-between"  alignItems="left" width="220px">
+              <Icon>
+          <CalendarMonthIcon color="primary"/>
+        </Icon>
+             <Typography mt="2px" variant="h5"
+                color={colors.primary[500]}>
+                 11/13/2023 - 11/26/2023
+            </Typography>
+    </Box>
+              <Box>
+                <Bar></Bar>
+               
+
+              </Box>
+              
             </Box>
             <Box>
         
             </Box>
-          </Box>
-          <Box height="450px" m="-20px 0 0 0">
-           
           </Box>
         </Box>
       
