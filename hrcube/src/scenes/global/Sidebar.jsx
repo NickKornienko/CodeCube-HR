@@ -11,6 +11,7 @@ import GridViewIcon from '@mui/icons-material/GridView';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 import ViewInArRoundedIcon from '@mui/icons-material/ViewInArRounded';
+import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -109,9 +110,9 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Organization"
+              title="Paid Time Off"
               to="/organization"
-              icon={<PeopleOutlinedIcon />}
+              icon={<AlarmOnIcon />}
               selected={selected}
               setSelected={setSelected}
             />

@@ -38,43 +38,23 @@ const Bar = () => {
         maxHeight: "100vh", // Sets the maximum height to the viewport height
         overflow: "auto", // Adds scrollbar if content overflows
 
-        boxSizing: "border-box", // Includes padding and border in the box's size>
-        justifyContent: "center",
-      }}
-    >
-      <BarChart
-        sx={{
-          "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel": {
-            strokeWidth: "0.4",
-            fill: "grey",
-          },
-          "& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel": {
-            strokeWidth: "0.4",
-            fill: "grey",
-            fontSize: "2px",
-          },
-          "& .MuiChartsAxis-bottom .MuiChartsAxis-line": {
-            stroke: "grey",
-            strokeWidth: 0.4,
-          },
-          // leftAxis Line Styles
-          "& .MuiChartsAxis-left .MuiChartsAxis-line": {
-            stroke: "grey",
-            strokeWidth: 0.4,
-          },
-          "& .MuiChartsAxis-left .MuiChartsAxis-tick": {
-            stroke: "grey",
-          },
-        }}
-        dataset={dataset}
-        xAxis={[{ scaleType: "band", dataKey: "day", barGapRatio: 0 }]}
-        series={[
-          { dataKey: "hours", color: colors.purpleAccent[500], valueFormatter },
-        ]}
-        {...chartSetting}
-        width={800}
-        height={400}
-      />
+
+         },
+         
+         
+  
+       }}
+       dataset={dataset}
+       xAxis={[
+        { scaleType: 'band', 
+        dataKey: 'day',  
+        barGapRatio: 0 }]}
+       series={[{  dataKey:'hours', color:[colors.purpleAccent[500]], valueFormatter }]}
+       {...chartSetting}
+       width={780}
+       height={400}
+      
+  />
     </Box>
   );
 };

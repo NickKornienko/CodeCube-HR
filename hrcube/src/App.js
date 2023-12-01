@@ -17,6 +17,8 @@ import Organization from "./scenes/organization";
 import Login from "./scenes/login";
 import Register from "./scenes/register";
 import SsoLink from "./scenes/sso_link";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -30,6 +32,7 @@ function App() {
   }, []);
 
   return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -74,6 +77,8 @@ function App() {
         </div>
       </ThemeProvider>
     </ColorModeContext.Provider>
+    </LocalizationProvider>
+    
   );
 }
 
