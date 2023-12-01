@@ -15,7 +15,6 @@ const SsoLinkPage = () => {
         setIsLinked(response.data.isLinked);
       } catch (error) {
         console.error("Error checking link status: ", error);
-        // Optionally handle specific error responses here if needed
       } finally {
         setLoading(false);
       }

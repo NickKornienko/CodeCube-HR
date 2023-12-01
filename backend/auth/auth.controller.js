@@ -105,7 +105,6 @@ const isGoogleLinked = async (req, res) => {
 
 // Function to unlink Google account
 const unlinkGoogleAccount = async (req, res) => {
-  // Assuming req.user is your authenticated user
   if (!req.user) {
     return res.status(401).json({ message: "Not authenticated" });
   }
