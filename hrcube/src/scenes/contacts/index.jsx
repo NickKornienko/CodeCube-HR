@@ -4,6 +4,7 @@ import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Divider from '@mui/material/Divider';
 
 
 const Contacts = () => {
@@ -34,8 +35,11 @@ const Contacts = () => {
        
       }} >
         <Box  m= "20px 40px 20px 40px">
-        <Box sx={{ m: "0px 0px 15px 0px" }} >
+        <Box display="flex" sx={{ m: "0px 0px 15px 0px" }} >
        <CalendarMonthIcon color="primary"></CalendarMonthIcon> 
+       <Typography color={colors.primary[500]} variant="h6"  sx={{ m: "0px 0px 5px 10px" }}>
+        11/13/2023 - 11/26/2023
+      </Typography>
  
         </Box>
         <Box >
@@ -45,7 +49,7 @@ const Contacts = () => {
           fontWeight="bold"
           sx={{ m: "0px 0px 10px 0px" }}
         >
-          Estimated earnings this period
+          Estimated earnings this period (pre-tax)
         </Typography>
         </Box>
         <Box >
@@ -54,7 +58,7 @@ const Contacts = () => {
           color={colors.white[500]}
           sx={{ m: "0px 0px 15px 0px" }}
         >
-          $0.00
+          $4000.00 
         </Typography>
         </Box>
         <Box >
@@ -63,7 +67,7 @@ const Contacts = () => {
           color={colors.primary[500]}
           sx={{ m: "0px 0px 15px 0px" }}
         >
-          0 hrs worked
+          80 hrs worked
         </Typography>
         </Box>
         </Box>
@@ -86,7 +90,73 @@ const Contacts = () => {
           borderRadius="15px"
           height="35vh"
           m="0px 40px 20px 40px"
+          p="25px 40px 25px 40px"
         >
+           <Box display="flex" justifyContent="space-between" width="100%" mb="15px">
+            <Box width="30%" >
+            <Typography color={colors.primary[500]}>
+            October 29, 2023 - November 12, 2023
+          </Typography>
+
+            </Box>
+         
+          <Typography color={colors.greenAccent[500]}>
+            Approved
+          </Typography>
+          <Typography color={colors.primary[500]}>
+            View
+          </Typography>
+          </Box>
+          <Divider variant="fullWidth" sx={{ bgcolor: 'grey' }} />
+          <Box display="flex" justifyContent="space-between" width="100%" mt="15px" mb="15px">
+            <Box width="30%">
+            <Typography color={colors.primary[500]}>
+            October 04, 2023 - October 28, 2023
+          </Typography>
+
+            </Box>
+         
+          <Typography color={colors.greenAccent[500]}>
+            Approved
+          </Typography>
+          <Typography color={colors.primary[500]}>
+            View
+          </Typography>
+          </Box>
+          <Divider variant="fullWidth" sx={{ bgcolor: 'grey' }} />
+          <Box display="flex" justifyContent="space-between" width="100%" mt="15px" mb="15px">
+            <Box width="30%" >
+            <Typography color={colors.primary[500]}>
+            September 19, 2023 - October 3, 2023
+          </Typography>
+
+            </Box>
+         
+          <Typography color={colors.greenAccent[500]}>
+            Approved
+          </Typography>
+          <Typography color={colors.primary[500]}>
+            View
+          </Typography>
+          </Box>
+          <Divider variant="fullWidth" sx={{ bgcolor: 'grey' }} />
+          <Box display="flex" justifyContent="space-between" width="100%" mt="15px" mb="15px">
+            <Box width="30%" >
+            <Typography color={colors.primary[500]}>
+            September 02, 2023 - September 18, 2023
+          </Typography>
+
+            </Box>
+         
+          <Typography color={colors.greenAccent[500]}>
+            Approved
+          </Typography>
+          <Typography color={colors.primary[500]}>
+            View
+          </Typography>
+          </Box>
+          <Divider variant="fullWidth" sx={{ bgcolor: 'grey' }} />
+          
 
         </Box>
     </Box>
