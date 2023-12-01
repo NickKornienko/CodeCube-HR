@@ -76,7 +76,7 @@ const Bar = () => {
         barGapRatio: 0 }]}
        series={[{  dataKey:'hours', color:[colors.purpleAccent[500]], valueFormatter }]}
        {...chartSetting}
-       width={800}
+       width={780}
        height={400}
       
   />
