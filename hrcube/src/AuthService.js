@@ -2,13 +2,27 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3000/api/";
 
+// Create an Axios instance for API calls
+const axiosInstance = axios.create({
+  baseURL: API_URL
+});
+
+// Interceptor to add the auth token to requests
+axiosInstance.interceptors.request.use((config) => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user && user.token) {
+    config.headers.Authorization = `Bearer ${user.token}`;
+  }
+  return config;
+});
+
 const register = (username, email, password) => {
-  return axios.post(API_URL + "register", { username, email, password });
+  return axiosInstance.post("register", { username, email, password });
 };
 
 const login = (username, password) => {
-  return axios
-    .post(API_URL + "login", { username, password })
+  return axiosInstance
+    .post("login", { username, password })
     .then((response) => {
       if (response.data.token) {
         localStorage.setItem("user", JSON.stringify(response.data));
@@ -22,15 +36,15 @@ const logout = () => {
 };
 
 const isGoogleLinked = async () => {
-  return axios.get(API_URL + "is-google-linked");
+  return axiosInstance.get("is-google-linked");
 };
 
 const linkGoogleAccount = (idToken) => {
-  return axios.post(API_URL + "link-google", { token: idToken });
+  return axiosInstance.post("link-google", { token: idToken });
 };
 
 const unlinkGoogleAccount = async () => {
-  return axios.post(API_URL + "unlink-google");
+  return axiosInstance.post("unlink-google");
 };
 
 const AuthService = {
