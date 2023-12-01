@@ -4,6 +4,7 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const { sequelize } = require("./db");
 const authRoutes = require("./auth/auth.routes");
+const secrets = require("./secrets.json");
 
 const app = express();
 
@@ -17,8 +18,7 @@ app.use((req, res, next) => {
 
   if (!token) return next(); // No token, continue without setting req.user
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    console.log(token);
+  jwt.verify(token, secrets.jwtSecret, (err, user) => {
     if (err) return res.sendStatus(403); // Invalid token
     req.user = user;
     next();

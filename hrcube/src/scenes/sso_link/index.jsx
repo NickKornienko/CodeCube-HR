@@ -5,16 +5,19 @@ const GOOGLE_CLIENT_ID = require("./secrets.json").GOOGLE_CLIENT_ID;
 
 const SsoLinkPage = () => {
   const [isLinked, setIsLinked] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkLinkStatus = async () => {
+      setLoading(true);
       try {
         const response = await AuthService.isGoogleLinked();
-        if (response.status === 200) {
-          setIsLinked(response.data.isLinked);
-        }
+        setIsLinked(response.data.isLinked);
       } catch (error) {
         console.error("Error checking link status: ", error);
+        // Optionally handle specific error responses here if needed
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -49,19 +52,29 @@ const SsoLinkPage = () => {
     }
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <h1>Google Account Link</h1>
       {isLinked ? (
-        <button onClick={handleUnlinkGoogle}>Unlink Google Account</button>
+        <div>
+          <p>Your account is linked with Google.</p>
+          <button onClick={handleUnlinkGoogle}>Unlink Google Account</button>
+        </div>
       ) : (
-        <GoogleLogin
-          clientId={GOOGLE_CLIENT_ID}
-          buttonText="Link Google Account"
-          onSuccess={handleSuccess}
-          onFailure={handleFailure}
-          cookiePolicy={"single_host_origin"}
-        />
+        <div>
+          <p>Your account is not linked with Google.</p>
+          <GoogleLogin
+            clientId={GOOGLE_CLIENT_ID}
+            buttonText="Link Google Account"
+            onSuccess={handleSuccess}
+            onFailure={handleFailure}
+            cookiePolicy={"single_host_origin"}
+          />
+        </div>
       )}
     </div>
   );

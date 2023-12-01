@@ -80,13 +80,27 @@ const handleLoginWithGoogle = async (req, res) => {
 
 // Function to check if Google account is linked
 const isGoogleLinked = async (req, res) => {
-  // Assuming req.user is your authenticated user
   if (!req.user) {
     return res.status(401).json({ message: "Not authenticated" });
   }
 
-  const user = await User.findByPk(req.user.id);
-  res.status(200).json({ isLinked: !!user.googleId });
+  try {
+    const user = await User.findByPk(req.user.id);
+
+    if (!user) {
+      return res
+        .status(200)
+        .json({
+          isLinked: false,
+          message: "User not found. Account needs linking.",
+        });
+    }
+
+    res.status(200).json({ isLinked: !!user.googleId });
+  } catch (error) {
+    console.error("Error in isGoogleLinked: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 // Function to unlink Google account
