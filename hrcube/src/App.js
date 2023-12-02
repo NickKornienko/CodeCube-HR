@@ -16,8 +16,9 @@ import { ColorModeContext, useMode } from "./theme";
 import Organization from "./scenes/organization";
 import Login from "./scenes/login";
 import Register from "./scenes/register";
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import SsoLink from "./scenes/sso_link";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -32,51 +33,53 @@ function App() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <div className="app">
-          {isLoggedIn && <Sidebar isSidebar={isSidebar} />}
-          <main className={isLoggedIn ? "content" : ""}>
-            {isLoggedIn && <Topbar setIsSidebar={setIsSidebar} />}
-            <Routes>
-              <Route
-                path="/"
-                element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />}
-              />
-              <Route
-                path="/login"
-                element={
-                  isLoggedIn ? (
-                    <Navigate to="/" />
-                  ) : (
-                    <Login setIsLoggedIn={setIsLoggedIn} />
-                  )
-                }
-              />
-              <Route path="/register" element={<Register />} />
-              {isLoggedIn ? (
-                <>
-                  <Route path="/organization" element={<Organization />} />
-                  <Route path="/contacts" element={<Contacts />} />
-                  <Route path="/invoices" element={<Invoices />} />
-                  <Route path="/form" element={<Form />} />
-                  <Route path="/bar" element={<Bar />} />
-                  <Route path="/pie" element={<Pie />} />
-                  <Route path="/line" element={<Line />} />
-                  <Route path="/faq" element={<FAQ />} />
-                  <Route path="/geography" element={<Geography />} />
-                </>
-              ) : (
-                <Route path="*" element={<Navigate to="/login" />} />
-              )}
-            </Routes>
-          </main>
-        </div>
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <div className="app">
+            {isLoggedIn && <Sidebar isSidebar={isSidebar} />}
+            <main className={isLoggedIn ? "content" : ""}>
+              {isLoggedIn && <Topbar setIsSidebar={setIsSidebar} />}
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    isLoggedIn ? <Dashboard /> : <Navigate to="/login" />
+                  }
+                />
+                <Route
+                  path="/login"
+                  element={
+                    isLoggedIn ? (
+                      <Navigate to="/" />
+                    ) : (
+                      <Login setIsLoggedIn={setIsLoggedIn} />
+                    )
+                  }
+                />
+                <Route path="/register" element={<Register />} />
+                {isLoggedIn ? (
+                  <>
+                    <Route path="/organization" element={<Organization />} />
+                    <Route path="/contacts" element={<Contacts />} />
+                    <Route path="/invoices" element={<Invoices />} />
+                    <Route path="/form" element={<Form />} />
+                    <Route path="/bar" element={<Bar />} />
+                    <Route path="/pie" element={<Pie />} />
+                    <Route path="/line" element={<Line />} />
+                    <Route path="/faq" element={<FAQ />} />
+                    <Route path="/geography" element={<Geography />} />
+                    <Route path="/sso_link" element={<SsoLink />} />
+                  </>
+                ) : (
+                  <Route path="*" element={<Navigate to="/login" />} />
+                )}
+              </Routes>
+            </main>
+          </div>
+        </ThemeProvider>
+      </ColorModeContext.Provider>
     </LocalizationProvider>
-    
   );
 }
 
