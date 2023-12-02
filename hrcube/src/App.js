@@ -17,6 +17,8 @@ import Organization from "./scenes/organization";
 import Login from "./scenes/login";
 import Register from "./scenes/register";
 import SsoLink from "./scenes/sso_link";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -64,7 +66,6 @@ function App() {
                   <Route path="/line" element={<Line />} />
                   <Route path="/faq" element={<FAQ />} />
                   <Route path="/geography" element={<Geography />} />
-                  <Route path="/sso_link" element={<SsoLink />} />
                 </>
               ) : (
                 <Route path="*" element={<Navigate to="/login" />} />
