@@ -1,11 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import AuthService from "../../AuthService.js";
-import { GoogleLogin } from "react-google-login";
+
 const GOOGLE_CLIENT_ID = require("./secrets.json").GOOGLE_CLIENT_ID;
 
 const SsoLinkPage = () => {
   const [isLinked, setIsLinked] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
+
+  // useCallback for initGoogleSignIn
+  const initGoogleSignIn = useCallback(() => {
+    window.google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleSignInResponse,
+    });
+  }, []); // No dependencies
+
+  // useCallback for loadGoogleScript
+  const loadGoogleScript = useCallback(() => {
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.onload = () => {
+      setGoogleScriptLoaded(true);
+      initGoogleSignIn();
+    };
+    document.body.appendChild(script);
+  }, [initGoogleSignIn]); // initGoogleSignIn as a dependency
 
   useEffect(() => {
     const checkLinkStatus = async () => {
@@ -21,12 +41,13 @@ const SsoLinkPage = () => {
     };
 
     checkLinkStatus();
-  }, []);
+    loadGoogleScript();
+  }, [loadGoogleScript]);
 
-  const handleSuccess = async (googleData) => {
+  const handleSignInResponse = async (googleResponse) => {
     try {
-      const response = await AuthService.linkGoogleAccount(googleData.tokenId);
-      if (response.status === 200) {
+      const authServiceResponse = await AuthService.linkGoogleAccount(googleResponse.credential);
+      if (authServiceResponse.status === 200) {
         setIsLinked(true);
         alert("Google account linked successfully");
       }
@@ -34,9 +55,14 @@ const SsoLinkPage = () => {
       console.error("Error linking Google account: ", error);
     }
   };
+  
 
-  const handleFailure = (error) => {
-    console.error("Google SSO failed: ", error);
+  const handleSignIn = () => {
+    if (!googleScriptLoaded) {
+      console.error("Google script not loaded yet");
+      return;
+    }
+    window.google.accounts.id.prompt();
   };
 
   const handleUnlinkGoogle = async () => {
@@ -66,13 +92,7 @@ const SsoLinkPage = () => {
       ) : (
         <div>
           <p>Your account is not linked with Google.</p>
-          <GoogleLogin
-            clientId={GOOGLE_CLIENT_ID}
-            buttonText="Link Google Account"
-            onSuccess={handleSuccess}
-            onFailure={handleFailure}
-            cookiePolicy={"single_host_origin"}
-          />
+          <button onClick={handleSignIn}>Link Google Account</button>
         </div>
       )}
     </div>

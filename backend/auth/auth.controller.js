@@ -120,7 +120,11 @@ const unlinkGoogleAccount = async (req, res) => {
 const linkGoogleAccount = async (req, res) => {
   const { token } = req.body;
 
+  console.log("req.isAuthenticated: ", req.isAuthenticated);
+  console.log("req.user: ", req.user);
+
   if (!req.isAuthenticated || !req.user) {
+    console.log("reached");
     return res
       .status(401)
       .json({ message: "You must be signed in to link an account." });
@@ -140,6 +144,7 @@ const linkGoogleAccount = async (req, res) => {
 
     const user = await User.findByPk(req.user.id);
     user.googleId = payload["sub"];
+    console.log(googleId)
     await user.save();
 
     res
