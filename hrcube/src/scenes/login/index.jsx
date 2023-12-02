@@ -7,11 +7,13 @@ import KeyIcon from "@mui/icons-material/Key";
 import ViewInArRoundedIcon from "@mui/icons-material/ViewInArRounded";
 import AuthService from "../../AuthService.js";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   // State for username and password
   const [username, setUsername] = useState("");
@@ -20,7 +22,7 @@ const Login = () => {
   const handleLogin = () => {
     AuthService.login(username, password)
       .then((response) => {
-        window.location.reload();
+        navigate("/");
         console.log("Login successful", response);
       })
       .catch((error) => {
