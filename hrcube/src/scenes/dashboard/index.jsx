@@ -21,7 +21,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Bar from "../../scenes/bar";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Icon from '@mui/material/Icon';
-import AlignItemsList from "../../components/AlignItemsList";
+
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -132,8 +132,6 @@ const Dashboard = () => {
             display="flex "
             justifyContent="space-between"
             alignItems="center"
-            overflow= 'auto'
-
           >
             <Box>
               <Typography
@@ -174,7 +172,7 @@ const Dashboard = () => {
       </Grid>
       <Grid item xs>
         <Item elevation={0}  >
-          <Box backgroundColor={colors.white} height="92vh"  overflow="auto">
+          <Box backgroundColor={colors.white} height="92vh" >
             <Box p="20px">
             {/* SEARCH BAR */}
       <Box
@@ -187,9 +185,7 @@ const Dashboard = () => {
         <IconButton type="button" sx={{ p: 1 }}>
           <ExpandMoreIcon />
         </IconButton>
-       
       </Box>
-      <AlignItemsList></AlignItemsList>
 
       </Box>
           </Box>
