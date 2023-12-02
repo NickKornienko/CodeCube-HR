@@ -1,31 +1,20 @@
-// server.js
 const express = require("express");
 const cors = require("cors");
-const jwt = require("jsonwebtoken");
-const { sequelize } = require("./db");
-const authRoutes = require("./auth/auth.routes");
-const secrets = require("./secrets.json");
+const { sequelize } = require("./db"); // Import Sequelize instance
+const authRoutes = require("./auth.routes");
 
 const app = express();
 
+// Enable CORS for all routes
 app.use(cors());
+
+// Handle JSON requests
 app.use(express.json());
 
-// JWT verification middleware
-app.use((req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (!token) return next(); // No token, continue without setting req.user
-
-  jwt.verify(token, secrets.jwtSecret, (err, user) => {
-    if (err) return res.sendStatus(403); // Invalid token
-    req.user = user;
-    next();
-  });
-});
-
+// Use routes
 app.use("/api", authRoutes);
+
+// Initialize and sync Sequelize
 sequelize.sync().then(() => {
   console.log("Database synced");
 });
