@@ -44,7 +44,7 @@ const authenticateWithGoogle = async (token) => {
   try {
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: GOOGLE_CLIENT_ID, // Use the GOOGLE_CLIENT_ID from your secrets
+      audience: GOOGLE_CLIENT_ID,
     });
     return ticket.getPayload(); // Contains user info from Google
   } catch (error) {
@@ -68,7 +68,7 @@ const handleLoginWithGoogle = async (req, res) => {
     }
 
     // Generate a token for the user
-    const jwtToken = jwt.sign({ userId: user.id }, jwtSecret, {
+    const jwtToken = jwt.sign({ userId: user.userId }, jwtSecret, {
       expiresIn: "24h",
     });
 
@@ -81,25 +81,21 @@ const handleLoginWithGoogle = async (req, res) => {
 // Function to check if Google account is linked
 const isGoogleLinked = async (req, res) => {
   if (!req.user) {
-    return res.status(401).json({ message: "Not authenticated" });
+    return res.status(401).json({ message: "User not authenticated" });
   }
 
   try {
-    const user = await User.findByPk(req.user.id);
-
+    const user = await User.findByPk(req.user.userId);
     if (!user) {
-      return res
-        .status(200)
-        .json({
-          isLinked: false,
-          message: "User not found. Account needs linking.",
-        });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ isLinked: !!user.googleId });
+    const isLinked = user.googleId != null;
+    const googleEmail = isLinked ? user.googleEmail : null;
+
+    res.status(200).json({ isLinked, email: googleEmail });
   } catch (error) {
-    console.error("Error in isGoogleLinked: ", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -109,8 +105,9 @@ const unlinkGoogleAccount = async (req, res) => {
     return res.status(401).json({ message: "Not authenticated" });
   }
 
-  const user = await User.findByPk(req.user.id);
+  const user = await User.findByPk(req.user.userId);
   user.googleId = null;
+  user.googleEmail = null;
   await user.save();
 
   res.status(200).json({ message: "Google account unlinked successfully" });
@@ -120,11 +117,7 @@ const unlinkGoogleAccount = async (req, res) => {
 const linkGoogleAccount = async (req, res) => {
   const { token } = req.body;
 
-  console.log("req.isAuthenticated: ", req.isAuthenticated);
-  console.log("req.user: ", req.user);
-
-  if (!req.isAuthenticated || !req.user) {
-    console.log("reached");
+  if (!req.user) {
     return res
       .status(401)
       .json({ message: "You must be signed in to link an account." });
@@ -132,24 +125,30 @@ const linkGoogleAccount = async (req, res) => {
 
   try {
     const payload = await authenticateWithGoogle(token);
-
     const existingUser = await User.findOne({
       where: { googleId: payload["sub"] },
     });
+
     if (existingUser) {
       return res.status(400).json({
         message: "This Google account is already linked to another account.",
       });
     }
 
-    const user = await User.findByPk(req.user.id);
+    const user = await User.findByPk(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
     user.googleId = payload["sub"];
-    console.log(googleId)
+    user.googleEmail = payload["email"];
     await user.save();
 
-    res
-      .status(200)
-      .json({ success: true, message: "Google account linked successfully." });
+    res.status(200).json({
+      success: true,
+      message: "Google account linked successfully.",
+      email: user.googleEmail,
+    });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
@@ -165,6 +164,37 @@ const verifyGoogleToken = async (req, res) => {
   }
 };
 
+const loginWithGoogle = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    const user = await User.findOne({ where: { googleId: payload["sub"] } });
+
+    if (!user) {
+      return res.status(401).json({
+        message:
+          "No account linked with this Google ID. Please register or link your account.",
+      });
+    }
+
+    const sessionToken = jwt.sign({ userId: user.id }, jwtSecret, {
+      expiresIn: "24h",
+    });
+
+    return res.status(200).json({ token: sessionToken });
+  } catch (error) {
+    console.error("Error logging in with Google: ", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -173,4 +203,5 @@ module.exports = {
   isGoogleLinked,
   unlinkGoogleAccount,
   verifyGoogleToken,
+  loginWithGoogle,
 };

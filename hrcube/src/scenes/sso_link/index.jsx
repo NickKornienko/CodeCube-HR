@@ -7,6 +7,7 @@ const SsoLinkPage = () => {
   const [isLinked, setIsLinked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
+  const [googleEmail, setGoogleEmail] = useState(null);
 
   // useCallback for initGoogleSignIn
   const initGoogleSignIn = useCallback(() => {
@@ -33,6 +34,7 @@ const SsoLinkPage = () => {
       try {
         const response = await AuthService.isGoogleLinked();
         setIsLinked(response.data.isLinked);
+        setGoogleEmail(response.data.email);
       } catch (error) {
         console.error("Error checking link status: ", error);
       } finally {
@@ -46,16 +48,18 @@ const SsoLinkPage = () => {
 
   const handleSignInResponse = async (googleResponse) => {
     try {
-      const authServiceResponse = await AuthService.linkGoogleAccount(googleResponse.credential);
+      const authServiceResponse = await AuthService.linkGoogleAccount(
+        googleResponse.credential
+      );
       if (authServiceResponse.status === 200) {
         setIsLinked(true);
+        setGoogleEmail(authServiceResponse.data.email);
         alert("Google account linked successfully");
       }
     } catch (error) {
       console.error("Error linking Google account: ", error);
     }
   };
-  
 
   const handleSignIn = () => {
     if (!googleScriptLoaded) {
@@ -70,6 +74,7 @@ const SsoLinkPage = () => {
       const response = await AuthService.unlinkGoogleAccount();
       if (response.status === 200) {
         setIsLinked(false);
+        setGoogleEmail(null);
         alert("Google account unlinked successfully");
       }
     } catch (error) {
@@ -87,6 +92,7 @@ const SsoLinkPage = () => {
       {isLinked ? (
         <div>
           <p>Your account is linked with Google.</p>
+          {googleEmail && <p>Google Account Email: {googleEmail}</p>}
           <button onClick={handleUnlinkGoogle}>Unlink Google Account</button>
         </div>
       ) : (

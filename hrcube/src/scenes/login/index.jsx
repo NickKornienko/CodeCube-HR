@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme.js";
 import InputBase from "@mui/material/InputBase";
@@ -7,6 +7,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import ViewInArRoundedIcon from "@mui/icons-material/ViewInArRounded";
 import AuthService from "../../AuthService.js";
 import { Link } from "react-router-dom";
+const GOOGLE_CLIENT_ID = require("./secrets.json").GOOGLE_CLIENT_ID;
 
 const Login = () => {
   const theme = useTheme();
@@ -16,6 +17,40 @@ const Login = () => {
   // State for username and password
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const initGoogleSSO = () => {
+    window.google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleGoogleSignIn,
+    });
+    window.google.accounts.id.renderButton(
+      document.getElementById("googleSignInButton"),
+      { theme: "outline", size: "large" }
+    );
+  };
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.onload = initGoogleSSO;
+    document.body.appendChild(script);
+  }, []);
+
+  const handleGoogleSignIn = (response) => {
+    AuthService.loginWithGoogle(response.credential)
+      .then(() => {
+        window.location.reload();
+        console.log("Google SSO login successful");
+      })
+      .catch((error) => {
+        setError("Failed to login with Google.");
+        console.error("Google SSO login failed", error);
+      });
+  };
+
+  const handleSSOLogin = () => {
+    window.google.accounts.id.prompt();
+  };
 
   const handleLogin = () => {
     AuthService.login(username, password)
@@ -176,6 +211,7 @@ const Login = () => {
             textTransform: "none",
             justifyContent: "flex-start",
           }}
+          onClick={handleSSOLogin} // Attach the onClick event handler
         >
           or login with SSO
         </Button>

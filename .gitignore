@@ -24,3 +24,5 @@ yarn-debug.log*
 yarn-error.log*
 backend/secrets.json
 hrcube/src/scenes/sso_link/secrets.json
+backend/config/config.json
+hrcube/src/scenes/login/secrets.json
