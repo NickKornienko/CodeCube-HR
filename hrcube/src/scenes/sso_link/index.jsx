@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import AuthService from "../../AuthService.js";
 
-const GOOGLE_CLIENT_ID = require("./secrets.json").GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_ID = require("../../secrets.json").GOOGLE_CLIENT_ID;
 
 const SsoLinkPage = () => {
   const [isLinked, setIsLinked] = useState(false);

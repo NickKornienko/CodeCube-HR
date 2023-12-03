@@ -1,22 +1,48 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { User } = require("../db");
-const secrets = require("../secrets.json");
+const db = require("../db/db");
+const { User, Employee } = require("../db/db");
+const secrets = require("../../secrets.json");
 const jwtSecret = secrets.jwtSecret;
 const { OAuth2Client } = require("google-auth-library");
-const GOOGLE_CLIENT_ID = require("../secrets.json").GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_ID = secrets.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const register = async (req, res) => {
   try {
+    const employeeId = parseInt(req.body.employeeId);
+    console.log("Raw employee_id:", req.body.employeeId);
+
+    if (isNaN(employeeId)) {
+      return res.status(400).send({ message: "Invalid employee ID." });
+    }
+
+    const existingUserWithEmployeeId = await User.findOne({
+      where: { employee_id: employeeId },
+    });
+    if (existingUserWithEmployeeId) {
+      return res
+        .status(400)
+        .send({ message: "Employee ID is already linked to a User." });
+    }
+
+    const employeeExists = await Employee.findByPk(employeeId);
+    if (!employeeExists) {
+      return res.status(404).send({ message: "Employee ID does not exist." });
+    }
+
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
     const user = await User.create({
       username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
+      employee_id: employeeId,
     });
+
     res.status(201).send(user);
   } catch (error) {
+    console.error(error);
     res.status(500).send(error);
   }
 };
