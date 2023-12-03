@@ -7,14 +7,13 @@ import KeyIcon from "@mui/icons-material/Key";
 import ViewInArRoundedIcon from "@mui/icons-material/ViewInArRounded";
 import AuthService from "../../AuthService.js";
 import { Link } from "react-router-dom";
-const GOOGLE_CLIENT_ID = require("./secrets.json").GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_ID = require("../../secrets.json").GOOGLE_CLIENT_ID;
 
 const Login = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [error, setError] = useState("");
 
-  // State for username and password
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 

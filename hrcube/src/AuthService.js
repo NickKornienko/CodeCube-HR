@@ -16,8 +16,13 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-const register = (username, email, password) => {
-  return axiosInstance.post("register", { username, email, password });
+const register = (username, email, password, employeeId) => {
+  return axiosInstance.post("register", {
+    username,
+    email,
+    password,
+    employeeId,
+  });
 };
 
 const login = (username, password) => {

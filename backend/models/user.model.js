@@ -18,7 +18,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    employee_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Employees",
+        key: "emp_no",
+      },
+    },
   });
+
+  User.associate = (models) => {
+    User.belongsTo(models.Employee, {
+      foreignKey: "employee_id",
+      as: "employee",
+    });
+  };
 
   return User;
 };

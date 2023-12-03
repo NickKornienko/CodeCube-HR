@@ -10,17 +10,16 @@ const Register = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
-
-  // State for registration details
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [employeeId, setEmployeeId] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleRegister = () => {
-    AuthService.register(username, email, password)
+    AuthService.register(username, email, password, employeeId)
       .then((response) => {
         console.log(response.data);
         setSuccessMsg("Registration successful. Please login.");
@@ -71,6 +70,31 @@ const Register = () => {
         >
           Create Your Account
         </Typography>
+
+        {/* Employee ID Input */}
+        <Box
+          sx={{
+            backgroundColor: colors.purpleAccent[200],
+            borderRadius: "7px",
+            width: "75%",
+            mb: 1,
+          }}
+        >
+          <InputBase
+            sx={{
+              ml: 2,
+              flex: 1,
+              color: colors.purpleAccent[900],
+              "& .MuiInputBase-input": {
+                color: colors.purpleAccent[900],
+              },
+            }}
+            placeholder="Employee ID"
+            type="number" // Ensure only numbers can be entered
+            value={employeeId}
+            onChange={(e) => setEmployeeId(e.target.value)}
+          />
+        </Box>
 
         {/* Username Input */}
         <Box

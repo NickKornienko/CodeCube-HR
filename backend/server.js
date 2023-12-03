@@ -2,9 +2,10 @@
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-const { sequelize } = require("./db");
+const { sequelize } = require("./db/db");
 const authRoutes = require("./auth/auth.routes");
-const secrets = require("./secrets.json");
+const dbRoutes = require("./db/db.routes");
+const secrets = require("../secrets.json");
 
 const app = express();
 
@@ -25,10 +26,16 @@ app.use((req, res, next) => {
   });
 });
 
-app.use("/api", authRoutes);
-sequelize.sync().then(() => {
-  console.log("Database synced");
-});
+sequelize
+  .sync()
+  .then(() => {
+    console.log("Database synced");
+    app.use("/api", authRoutes);
+    app.use("/api", dbRoutes);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch((error) => {
+    console.error("Unable to sync database:", error);
+  });
