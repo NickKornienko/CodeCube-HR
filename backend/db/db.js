@@ -21,6 +21,19 @@ const Employee = require("../models/employee.model")(
   Sequelize.DataTypes
 );
 
+if (User.associate) {
+  User.associate({ Employee, Timesheet, Timeoff });
+}
+if (Employee.associate) {
+  Employee.associate({ User, Timesheet, Timeoff });
+}
+if (Timesheet.associate) {
+  Timesheet.associate({ User, Employee });
+}
+if (Timeoff.associate) {
+  Timeoff.associate({ User, Employee });
+}
+
 module.exports = {
   sequelize,
   User,

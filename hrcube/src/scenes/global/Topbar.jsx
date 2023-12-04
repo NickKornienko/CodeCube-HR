@@ -1,5 +1,5 @@
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { ColorModeContext, tokens } from "../../theme";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
@@ -8,22 +8,31 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
-import MenuIcon from "@mui/icons-material/Menu";
-import Menu from "@mui/icons-material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import AccountMenu from "../../components/AccountMenu";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useNavigate } from "react-router-dom";
+import AuthService from "../../AuthService.js";
+import AccountMenu from "../../components/AccountMenu";
 
 const Topbar = () => {
+  const [userName, setUserName] = useState("Loading...");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
-
   const navigate = useNavigate();
   const handleLinkGoogleAccount = () => {
     navigate("/sso_link");
   };
+
+  useEffect(() => {
+    AuthService.getUserInfo().then(
+      (response) => {
+        setUserName(response.data.name);
+      },
+      (error) => {
+        console.error("Error fetching user info:", error);
+      }
+    );
+  }, []);
 
   return (
     <Box
@@ -55,8 +64,8 @@ const Topbar = () => {
       <IconButton onClick={handleLinkGoogleAccount}>
         <GoogleIcon color="primary" />
       </IconButton>
-      
-      <Box display="flex">
+
+      <Box display="flex" alignItems="center">
         <IconButton>
           <EmailOutlinedIcon color="primary" />
         </IconButton>
@@ -64,13 +73,19 @@ const Topbar = () => {
         <IconButton>
           <NotificationsOutlinedIcon color="primary" />
         </IconButton>
+
         <IconButton>
           <PersonOutlinedIcon color="primary" />
         </IconButton>
-        <Box mt="8px" height="100%" justifyContent="center">
-          <Typography color={colors.primary[500]}>John Doe</Typography>
+
+        {/* The Typography component is wrapped in a Box with flex properties for alignment */}
+        <Box display="flex" alignItems="center" height="100%">
+          <Typography variant="h6" style={{ lineHeight: "1" }}>
+            {userName}
+          </Typography>
         </Box>
-        <AccountMenu></AccountMenu>
+
+        <AccountMenu />
       </Box>
     </Box>
   );

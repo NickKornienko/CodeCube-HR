@@ -8,6 +8,31 @@ const { OAuth2Client } = require("google-auth-library");
 const GOOGLE_CLIENT_ID = secrets.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
+const getUserInfo = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const user = await User.findByPk(userId, {
+      include: [{
+        model: Employee,
+        as: 'employee',
+        attributes: ['first_name', 'last_name'],
+      }]
+    });
+
+    if (!user || !user.employee) {
+      return res.status(404).send({ message: "User not found." });
+    }
+
+    res.json({
+      name: `${user.employee.first_name} ${user.employee.last_name}`,
+      // You can include other user or employee information as needed
+    });
+  } catch (error) {
+    console.error("Error retrieving user information:", error);
+    res.status(500).send({ message: "Error retrieving user information." });
+  }
+};
+
 const register = async (req, res) => {
   try {
     const employeeId = parseInt(req.body.employeeId);
@@ -230,4 +255,5 @@ module.exports = {
   unlinkGoogleAccount,
   verifyGoogleToken,
   loginWithGoogle,
+  getUserInfo,
 };

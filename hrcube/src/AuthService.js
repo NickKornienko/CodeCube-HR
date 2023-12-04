@@ -64,6 +64,10 @@ const loginWithGoogle = (googleToken) => {
     });
 };
 
+const getUserInfo = () => {
+  return axiosInstance.get("user-info");
+};
+
 const AuthService = {
   login,
   logout,
@@ -72,6 +76,7 @@ const AuthService = {
   unlinkGoogleAccount,
   linkGoogleAccount,
   loginWithGoogle,
+  getUserInfo,
 };
 
 export default AuthService;

@@ -7,11 +7,12 @@ import { tokens } from "../../theme";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import GridViewIcon from '@mui/icons-material/GridView';
-import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
-import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
-import ViewInArRoundedIcon from '@mui/icons-material/ViewInArRounded';
-import AlarmOnIcon from '@mui/icons-material/AlarmOn';
+import GridViewIcon from "@mui/icons-material/GridView";
+import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
+import ViewInArRoundedIcon from "@mui/icons-material/ViewInArRounded";
+import AlarmOnIcon from "@mui/icons-material/AlarmOn";
+import ApprovalOutlinedIcon from "@mui/icons-material/ApprovalOutlined";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -36,6 +37,7 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+  const isManager = true; // This should be replaced with the actual logic from the backend
 
   return (
     <Box
@@ -76,16 +78,18 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                <ViewInArRoundedIcon/>
+                  <ViewInArRoundedIcon />
                 </IconButton>
-                <Typography variant="h4" color={colors.blueAccent[300]} fontWeight="bold">
+                <Typography
+                  variant="h4"
+                  color={colors.blueAccent[300]}
+                  fontWeight="bold"
+                >
                   HRCubicle
                 </Typography>
               </Box>
             )}
           </MenuItem>
-
-          
 
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
@@ -95,7 +99,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-             <Item
+            <Item
               title="Payroll"
               to="/contacts"
               icon={<PaidOutlinedIcon />}
@@ -124,6 +128,15 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
+            {isManager && (
+              <Item
+                title="Approvals"
+                to="/approvals"
+                icon={<ApprovalOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
           </Box>
         </Menu>
       </ProSidebar>
