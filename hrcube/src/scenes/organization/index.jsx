@@ -70,9 +70,15 @@ const Organization = () => {
     try {
       const response = await DbService.sendTimeoffData(ptoRequestData);
       if (response.status === 201) {
+        const { startDate: currentWeekStart, endDate: currentWeekEnd } =
+          getCurrentWeek();
         if (
-          ptoRequestData.startDate >= getCurrentWeek().startDate ||
-          ptoRequestData.endDate <= getCurrentWeek().endDate
+          (ptoRequestData.startDate <= currentWeekEnd &&
+            ptoRequestData.startDate >= currentWeekStart) ||
+          (ptoRequestData.endDate >= currentWeekStart &&
+            ptoRequestData.endDate <= currentWeekEnd) ||
+          (ptoRequestData.startDate <= currentWeekStart &&
+            ptoRequestData.endDate >= currentWeekEnd)
         ) {
           setPtoRequests([...ptoRequests, ptoRequestData]);
         }
@@ -114,13 +120,17 @@ const Organization = () => {
             label="Vacation Start Date"
             value={startDate}
             onChange={setStartDate}
-            renderInput={(params) => <TextField {...params} />}
+            slots={{
+              TextField: (params) => <TextField {...params} />,
+            }}
           />
           <DatePicker
             label="Vacation End Date"
             value={endDate}
             onChange={setEndDate}
-            renderInput={(params) => <TextField {...params} />}
+            slots={{
+              TextField: (params) => <TextField {...params} />,
+            }}
           />
         </LocalizationProvider>
         <TextField
