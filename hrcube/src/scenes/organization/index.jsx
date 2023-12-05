@@ -172,6 +172,9 @@ const Organization = () => {
               <Typography color={colors.primary[500]}>
                 Comments: {request.user_comments}
               </Typography>
+              <Typography color={colors.primary[500]}>
+                Approval: {request.approval}
+              </Typography>
             </Box>
           ))}
         </Box>
