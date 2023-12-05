@@ -28,8 +28,8 @@ const sendTimesheetData = (userId, timesheetData) => {
   // TODO: Implement POST request to send timesheet data
 };
 
-const sendTimeoffData = (userId, timeoffData) => {
-  // TODO: Implement POST request to send timeoff data
+const sendTimeoffData = (timeoffData) => {
+  return axiosInstance.post("timeoff", timeoffData);
 };
 
 const DbService = {

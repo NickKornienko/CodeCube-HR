@@ -33,10 +33,6 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Employee.associate = function (models) {
-    Employee.hasOne(models.User, {
-      foreignKey: "employee_id",
-      as: "user",
-    });
     Employee.hasOne(models.User, { foreignKey: "employee_id" });
     Employee.hasMany(models.Timesheet, { foreignKey: "emp_no" });
     Employee.hasMany(models.Timeoff, { foreignKey: "emp_no" });

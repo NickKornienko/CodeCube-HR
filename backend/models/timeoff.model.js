@@ -2,36 +2,36 @@ module.exports = (sequelize, DataTypes) => {
   const Timeoff = sequelize.define("Timeoff", {
     approval: {
       type: DataTypes.TINYINT,
-      allowNull: true
+      allowNull: true,
     },
     dept_no: {
       type: DataTypes.CHAR(4),
-      allowNull: false
+      allowNull: false,
     },
     emp_no: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
     start_date: {
       type: DataTypes.DATEONLY,
-      allowNull: false
+      allowNull: false,
     },
     end_date: {
       type: DataTypes.DATEONLY,
-      allowNull: false
+      allowNull: false,
     },
-    type_of_leave: {
-      type: DataTypes.STRING(100),
-      allowNull: false
+    user_comments: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
     },
     manager_emp_no: {
       type: DataTypes.INTEGER,
-      allowNull: false
-    }
+      allowNull: false,
+    },
   });
 
   Timeoff.associate = (models) => {
-    Timeoff.belongsTo(models.Employee, { foreignKey: 'emp_no' });
+    Timeoff.belongsTo(models.Employee, { foreignKey: "emp_no" });
   };
 
   return Timeoff;

@@ -8,6 +8,10 @@ const sequelize = new Sequelize(secrets.NAME, secrets.USER, secrets.PASSWORD, {
 });
 
 const User = require("../models/user.model")(sequelize, Sequelize.DataTypes);
+const Employee = require("../models/employee.model")(
+  sequelize,
+  Sequelize.DataTypes
+);
 const Timesheet = require("../models/timesheet.model")(
   sequelize,
   Sequelize.DataTypes
@@ -16,7 +20,11 @@ const Timeoff = require("../models/timeoff.model")(
   sequelize,
   Sequelize.DataTypes
 );
-const Employee = require("../models/employee.model")(
+const Dept_emp = require("../models/dept_emp.model")(
+  sequelize,
+  Sequelize.DataTypes
+);
+const Dept_manager = require("../models/dept_manager.model")(
   sequelize,
   Sequelize.DataTypes
 );
@@ -25,7 +33,7 @@ if (User.associate) {
   User.associate({ Employee, Timesheet, Timeoff });
 }
 if (Employee.associate) {
-  Employee.associate({ User, Timesheet, Timeoff });
+  Employee.associate({ User, Timesheet, Timeoff, Dept_emp });
 }
 if (Timesheet.associate) {
   Timesheet.associate({ User, Employee });
@@ -34,10 +42,19 @@ if (Timeoff.associate) {
   Timeoff.associate({ User, Employee });
 }
 
+if (Dept_emp.associate) {
+  Dept_emp.associate({ Employee, Dept_manager });
+}
+if (Dept_manager.associate) {
+  Dept_manager.associate({ Employee, Dept_emp });
+}
+
 module.exports = {
   sequelize,
   User,
   Timesheet,
   Timeoff,
   Employee,
+  Dept_emp,
+  Dept_manager,
 };
