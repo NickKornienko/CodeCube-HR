@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../db/db");
-const { User, Employee } = require("../db/db");
+const { User, Employee, Dept_manager } = require("../db/db");
 const secrets = require("../../secrets.json");
 const jwtSecret = secrets.jwtSecret;
 const { OAuth2Client } = require("google-auth-library");
@@ -12,20 +12,26 @@ const getUserInfo = async (req, res) => {
   try {
     const userId = req.user.userId;
     const user = await User.findByPk(userId, {
-      include: [{
-        model: Employee,
-        as: 'employee',
-        attributes: ['first_name', 'last_name'],
-      }]
+      include: [
+        {
+          model: Employee,
+          as: "employee",
+          attributes: ["emp_no", "first_name", "last_name"],
+        },
+      ],
     });
 
     if (!user || !user.employee) {
       return res.status(404).send({ message: "User not found." });
     }
 
+    const isManager = await Dept_manager.findOne({
+      where: { emp_no: user.employee.emp_no },
+    });
+
     res.json({
       name: `${user.employee.first_name} ${user.employee.last_name}`,
-      // You can include other user or employee information as needed
+      isManager: !!isManager,
     });
   } catch (error) {
     console.error("Error retrieving user information:", error);

@@ -7,6 +7,7 @@ const {
   Dept_manager,
 } = require("./db");
 
+const Sequelize = require("sequelize");
 const { Op } = require("sequelize");
 
 const getEmpNoFromUserId = async (userId) => {
@@ -75,6 +76,74 @@ const getTimeoffForUser = async (req, res) => {
     res.json(timeoff);
   } catch (error) {
     console.error("Error fetching timeoff:", error);
+    res.status(500).send(error.message);
+  }
+};
+
+const getTimeoffForManagedEmployees = async (req, res) => {
+  try {
+    const mgrEmpNo = await getEmpNoFromUserId(req.user.userId);
+    if (!mgrEmpNo) {
+      return res.status(404).json({ message: "Manager not found" });
+    }
+
+    const timeoffRecords = await Timeoff.findAll({
+      where: {
+        manager_emp_no: mgrEmpNo,
+      },
+      include: [
+        {
+          model: Employee,
+          attributes: [],
+        },
+      ],
+      attributes: {
+        include: [
+          [
+            Sequelize.literal(
+              'CONCAT(`Employee`.`first_name`, " ", `Employee`.`last_name`)'
+            ),
+            "name",
+          ],
+        ],
+      },
+      raw: true,
+    });
+
+    res.json(
+      timeoffRecords.map((record) => {
+        return {
+          ...record,
+          name: record.name,
+        };
+      })
+    );
+  } catch (error) {
+    console.error("Error fetching time off for managed employees:", error);
+    res.status(500).send(error.message);
+  }
+};
+
+const approveTimeoff = async (req, res) => {
+  try {
+    const { timeoffId, status } = req.body;
+
+    if (![1, 2].includes(status)) {
+      return res.status(400).json({ message: "Invalid status value" });
+    }
+
+    const updated = await Timeoff.update(
+      { approval_status: status },
+      { where: { id: timeoffId } }
+    );
+
+    if (updated[0] > 0) {
+      res.json({ message: "Timeoff status updated successfully" });
+    } else {
+      res.status(404).json({ message: "Timeoff not found" });
+    }
+  } catch (error) {
+    console.error("Error updating timeoff status:", error);
     res.status(500).send(error.message);
   }
 };
@@ -173,4 +242,6 @@ module.exports = {
   getTimesheetsForUser,
   getTimeoffForUser,
   createTimeoffRequest,
+  getTimeoffForManagedEmployees,
+  approveTimeoff,
 };

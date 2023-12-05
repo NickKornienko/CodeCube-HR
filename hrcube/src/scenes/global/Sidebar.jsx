@@ -13,6 +13,8 @@ import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import ViewInArRoundedIcon from "@mui/icons-material/ViewInArRounded";
 import AlarmOnIcon from "@mui/icons-material/AlarmOn";
 import ApprovalOutlinedIcon from "@mui/icons-material/ApprovalOutlined";
+import { useEffect } from "react";
+import AuthService from "../../AuthService.js";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -37,7 +39,16 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-  const isManager = true; // This should be replaced with the actual logic from the backend
+  const [isManager, setIsManager] = useState(false);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const userInfo = await AuthService.getUserInfo();
+      setIsManager(userInfo.data.isManager);
+    };
+
+    fetchUserInfo();
+  }, []);
 
   return (
     <Box

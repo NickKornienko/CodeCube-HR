@@ -24,6 +24,17 @@ const getTimeoffForUser = (startDate, endDate) => {
   return axiosInstance.get(`timeoff?startDate=${startDate}&endDate=${endDate}`);
 };
 
+const getTimeoffForManager = () => {
+  return axiosInstance.get("timeoff-manager");
+};
+
+const approveTimeoff = (timeoffId, status) => {
+  return axiosInstance.post("approve-timeoff", {
+    timeoffId: timeoffId,
+    status: status,
+  });
+};
+
 const sendTimesheetData = (userId, timesheetData) => {
   // TODO: Implement POST request to send timesheet data
 };
@@ -37,6 +48,8 @@ const DbService = {
   getTimeoffForUser,
   sendTimesheetData,
   sendTimeoffData,
+  getTimeoffForManager,
+  approveTimeoff,
 };
 
 export default DbService;
