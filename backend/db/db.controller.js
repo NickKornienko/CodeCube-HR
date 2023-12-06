@@ -5,10 +5,100 @@ const {
   User,
   Dept_emp,
   Dept_manager,
+  Tweet,
 } = require("./db");
 
+const secrets = require("../../secrets.json");
 const Sequelize = require("sequelize");
 const { Op } = require("sequelize");
+const { TwitterApi } = require("twitter-api-v2");
+
+const twitterClient = new TwitterApi({
+  appKey: secrets.twitter.appKey,
+  appSecret: secrets.twitter.appSecret,
+  accessToken: secrets.twitter.accessToken,
+  accessSecret: secrets.twitter.accessSecret,
+});
+
+const getTweets = async (req, res) => {
+  try {
+    const tweets = await Tweet.findAll({
+      include: [
+        {
+          model: Employee,
+          attributes: ["emp_no", "first_name", "last_name"],
+        },
+      ],
+    });
+    res.json(tweets);
+  } catch (error) {
+    console.error("Error fetching tweets:", error);
+    res.status(500).send(error.message);
+  }
+};
+
+const postTweet = async (req, res) => {
+  try {
+    const empNo = await getEmpNoFromUserId(req.user.userId);
+    if (!empNo) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+    const employee = await Employee.findOne({
+      where: { emp_no: empNo },
+      attributes: ["first_name", "last_name"],
+    });
+
+    if (!employee) {
+      return res.status(404).json({ message: "Employee details not found" });
+    }
+
+    const message = `${employee.first_name} ${employee.last_name}: ${req.body.content}`;
+    const tweetResponse = await twitterClient.v2.tweet(message);
+
+    const savedTweet = await Tweet.create({
+      emp_no: empNo,
+      emp_name: `${employee.first_name} ${employee.last_name}`,
+      tweetId: tweetResponse.data.id,
+      content: req.body.content,
+    });
+
+    res.status(201).json(savedTweet);
+  } catch (error) {
+    console.error("Error posting tweet:", error);
+    res.status(500).send(error.message);
+  }
+};
+
+const deleteTweet = async (req, res) => {
+  try {
+    const { tweetId } = req.params;
+    const userId = req.user.userId;
+
+    const empNo = await getEmpNoFromUserId(userId);
+    if (!empNo) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const tweet = await Tweet.findOne({
+      where: { tweetId: tweetId, emp_no: empNo },
+    });
+
+    if (!tweet) {
+      return res.status(403).json({
+        message: "Tweet not found or user not authorized to delete this tweet",
+      });
+    }
+
+    await twitterClient.v2.deleteTweet(tweetId);
+    await tweet.destroy();
+
+    res.json({ message: "Tweet deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting tweet:", error);
+    res.status(500).send(error.message);
+  }
+};
 
 const getEmpNoFromUserId = async (userId) => {
   const user = await User.findByPk(userId);
@@ -244,4 +334,7 @@ module.exports = {
   createTimeoffRequest,
   getTimeoffForManagedEmployees,
   approveTimeoff,
+  postTweet,
+  deleteTweet,
+  getTweets,
 };

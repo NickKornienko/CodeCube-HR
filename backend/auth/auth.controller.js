@@ -31,6 +31,7 @@ const getUserInfo = async (req, res) => {
 
     res.json({
       name: `${user.employee.first_name} ${user.employee.last_name}`,
+      emp_no: user.employee.emp_no,
       isManager: !!isManager,
     });
   } catch (error) {

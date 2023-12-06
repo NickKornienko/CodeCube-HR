@@ -28,12 +28,17 @@ const Dept_manager = require("../models/dept_manager.model")(
   sequelize,
   Sequelize.DataTypes
 );
+const Tweet = require("../models/tweet.model")(
+  sequelize,
+  Sequelize.DataTypes
+);
 
+// Associations
 if (User.associate) {
   User.associate({ Employee, Timesheet, Timeoff });
 }
 if (Employee.associate) {
-  Employee.associate({ User, Timesheet, Timeoff, Dept_emp });
+  Employee.associate({ User, Timesheet, Timeoff, Dept_emp, Tweet });
 }
 if (Timesheet.associate) {
   Timesheet.associate({ User, Employee });
@@ -41,12 +46,14 @@ if (Timesheet.associate) {
 if (Timeoff.associate) {
   Timeoff.associate({ User, Employee });
 }
-
 if (Dept_emp.associate) {
   Dept_emp.associate({ Employee, Dept_manager });
 }
 if (Dept_manager.associate) {
   Dept_manager.associate({ Employee, Dept_emp });
+}
+if (Tweet.associate) {
+  Tweet.associate({ Employee });
 }
 
 module.exports = {
@@ -57,4 +64,5 @@ module.exports = {
   Employee,
   Dept_emp,
   Dept_manager,
+  Tweet,
 };

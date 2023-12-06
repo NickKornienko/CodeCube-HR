@@ -43,6 +43,18 @@ const sendTimeoffData = (timeoffData) => {
   return axiosInstance.post("timeoff", timeoffData);
 };
 
+const postTweet = (tweetContent) => {
+  return axiosInstance.post("post-tweet", tweetContent);
+};
+
+const deleteTweet = (tweetId) => {
+  return axiosInstance.delete(`/delete-tweet/${tweetId}`);
+};
+
+const getTweets = () => {
+  return axiosInstance.post("get-tweets");
+};
+
 const DbService = {
   getTimesheetsForUser,
   getTimeoffForUser,
@@ -50,6 +62,9 @@ const DbService = {
   sendTimeoffData,
   getTimeoffForManager,
   approveTimeoff,
+  postTweet,
+  deleteTweet,
+  getTweets,
 };
 
 export default DbService;

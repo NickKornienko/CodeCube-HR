@@ -8,5 +8,8 @@ router.get("/timeoff/", dbController.getTimeoffForUser);
 router.post("/timeoff", dbController.createTimeoffRequest);
 router.get("/timeoff-manager", dbController.getTimeoffForManagedEmployees);
 router.post("/approve-timeoff", dbController.createTimeoffRequest);
+router.post("/post-tweet", dbController.postTweet);
+router.delete("/delete-tweet/:tweetId", dbController.deleteTweet);
+router.post("/get-tweets", dbController.getTweets);
 
 module.exports = router;
