@@ -129,6 +129,63 @@ const getTimesheetsForUser = async (req, res) => {
   }
 };
 
+const createTimeSheetForUser = async (req, res) => {
+  try {
+    const { date, hours } = req.body;
+    const empNo = await getEmpNoFromUserId(req.user.userId);
+
+    if (!empNo) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+    const deptEmp = await Dept_emp.findOne({
+      where: { emp_no: empNo },
+      order: [["from_date", "DESC"]],
+    });
+
+    if (!deptEmp || !deptEmp.dept_no) {
+      return res
+        .status(404)
+        .json({ message: "Department not found for employee" });
+    }
+
+    const deptManager = await Dept_manager.findOne({
+      where: { dept_no: deptEmp.dept_no },
+      order: [["from_date", "DESC"]],
+    });
+
+    if (!deptManager || !deptManager.emp_no) {
+      return res
+        .status(404)
+        .json({ message: "Manager not found for department" });
+    }
+
+    const [timesheet, created] = await Timesheet.findOrCreate({
+      where: { emp_no: empNo, date },
+      defaults: {
+        no_hours: hours,
+        dept_no: deptEmp.dept_no,
+        manager_emp_no: deptManager.emp_no,
+      },
+    });
+
+    if (!created) {
+      timesheet.no_hours = hours;
+      timesheet.dept_no = deptEmp.dept_no;
+      timesheet.manager_emp_no = deptManager.emp_no;
+      await timesheet.save();
+    }
+
+    res.status(201).json({
+      message: "Timesheet created or updated successfully",
+      timesheet,
+    });
+  } catch (error) {
+    console.error("Error creating/updating timesheet:", error);
+    res.status(500).send(error.message);
+  }
+};
+
 const getTimeoffForUser = async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
@@ -332,6 +389,7 @@ const createTimeoffRequest = async (req, res) => {
 
 module.exports = {
   getTimesheetsForUser,
+  createTimeSheetForUser,
   getTimeoffForUser,
   createTimeoffRequest,
   getTimeoffForManagedEmployees,

@@ -20,6 +20,10 @@ const getTimesheetsForUser = (startDate, endDate) => {
   );
 };
 
+const sendTimesheetData = (timesheetData) => {
+  return axiosInstance.post("timesheets", timesheetData);
+};
+
 const getTimeoffForUser = (startDate, endDate) => {
   return axiosInstance.get(`timeoff?startDate=${startDate}&endDate=${endDate}`);
 };
@@ -30,10 +34,6 @@ const getTimeoffForManager = () => {
 
 const approveTimeoff = (timeoffRequest) => {
   return axiosInstance.post("approve-timeoff", timeoffRequest);
-};
-
-const sendTimesheetData = (userId, timesheetData) => {
-  // TODO: Implement POST request to send timesheet data
 };
 
 const sendTimeoffData = (timeoffData) => {

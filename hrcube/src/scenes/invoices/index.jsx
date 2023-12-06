@@ -5,13 +5,21 @@ import { useTheme } from "@mui/material/styles";
 import { tokens } from "../../theme";
 import DbService from "../../DbService";
 import Header from "../../components/Header";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 const Invoices = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [timesheets, setTimesheets] = useState([]);
+  const [date, setDate] = useState("");
+  const [hours, setHours] = useState("");
 
   useEffect(() => {
+    fetchTimesheets();
+  }, []);
+
+  const fetchTimesheets = () => {
     const { startDate, endDate } = getCurrentWeek();
     DbService.getTimesheetsForUser(startDate, endDate)
       .then((response) => {
@@ -20,7 +28,19 @@ const Invoices = () => {
       .catch((error) => {
         console.error("Error fetching timesheets:", error);
       });
-  }, []);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const timesheet = { date, hours };
+      await DbService.sendTimesheetData(timesheet);
+      setDate("");
+      setHours("");
+      fetchTimesheets();
+    } catch (error) {
+      console.error("Error submitting timesheet:", error);
+    }
+  };
 
   const getCurrentWeek = () => {
     const currentDate = new Date();
@@ -55,6 +75,30 @@ const Invoices = () => {
   return (
     <Box>
       <Header />
+      {/* Timesheet Submission Form */}
+      <Box m="20px">
+        <Typography variant="h4" color={colors.primary[400]} sx={{ mb: 2 }}>
+          Submit Hours Worked
+        </Typography>
+        <TextField
+          label="Date"
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          sx={{ mr: 2 }}
+        />
+        <TextField
+          label="Hours Worked"
+          type="number"
+          value={hours}
+          onChange={(e) => setHours(e.target.value)}
+          sx={{ mr: 2 }}
+        />
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Submit
+        </Button>
+      </Box>
+      {/* Timesheet Display */}
       <Box m="20px">
         <Typography
           variant="h3"
@@ -62,16 +106,6 @@ const Invoices = () => {
           sx={{ m: "0 0 5px 0" }}
         >
           Timesheet
-        </Typography>
-      </Box>
-      <Box m="20px">
-        <Typography
-          variant="h4"
-          color={colors.primary[400]}
-          fontWeight="bold"
-          sx={{ m: "0px 0px 10px 20px" }}
-        >
-          Upcoming Shifts
         </Typography>
       </Box>
       <Box
