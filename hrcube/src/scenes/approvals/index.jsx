@@ -11,7 +11,6 @@ const ApprovalsPage = () => {
     const fetchPtoRequests = async () => {
       try {
         const response = await DbService.getTimeoffForManager();
-        // Assuming the response includes a 'name' field
         setPtoRequests(response.data);
       } catch (error) {
         console.error("Error fetching PTO requests:", error);
@@ -34,7 +33,6 @@ const ApprovalsPage = () => {
     }
   };
 
-  // Define columns for the DataGrid
   const columns = [
     { field: "emp_no", headerName: "Employee Number", width: 130 },
     { field: "name", headerName: "Employee Name", width: 150 },
@@ -87,6 +85,7 @@ const ApprovalsPage = () => {
     await DbService.approveTimeoff(timeoffRequest);
     updateRequestStatus(id, 2);
   };
+
   const updateRequestStatus = (id, approvalCode) => {
     setPtoRequests((prevRequests) =>
       prevRequests.map((request) =>
@@ -96,7 +95,7 @@ const ApprovalsPage = () => {
   };
 
   return (
-    <Box sx={{ height: 400, width: "100%" }}>
+    <>
       <Header />
       <Typography variant="h4" gutterBottom>
         PTO Requests
@@ -106,9 +105,9 @@ const ApprovalsPage = () => {
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
-        checkboxSelection
+        hideFooterSelectedRowCount
       />
-    </Box>
+    </>
   );
 };
 
