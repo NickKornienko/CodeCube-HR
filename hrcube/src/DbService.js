@@ -28,11 +28,8 @@ const getTimeoffForManager = () => {
   return axiosInstance.get("timeoff-manager");
 };
 
-const approveTimeoff = (timeoffId, status) => {
-  return axiosInstance.post("approve-timeoff", {
-    timeoffId: timeoffId,
-    status: status,
-  });
+const approveTimeoff = (timeoffRequest) => {
+  return axiosInstance.post("approve-timeoff", timeoffRequest);
 };
 
 const sendTimesheetData = (userId, timesheetData) => {

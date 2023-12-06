@@ -76,20 +76,17 @@ const ApprovalsPage = () => {
     },
   ];
 
-  // Handlers for Approve/Deny actions
   const handleApprove = async (id) => {
-    // Implement the logic to approve the request
-    await DbService.approveTimeoff(id, 1); // 1 for approved
-    updateRequestStatus(id, 1); // Update to the 'approval' code
+    const timeoffRequest = { timeoffId: id, status: 1 };
+    await DbService.approveTimeoff(timeoffRequest);
+    updateRequestStatus(id, 1);
   };
 
   const handleDeny = async (id) => {
-    // Implement the logic to deny the request
-    await DbService.approveTimeoff(id, 2); // 2 for denied
-    updateRequestStatus(id, 2); // Update to the 'approval' code
+    const timeoffRequest = { timeoffId: id, status: 2 };
+    await DbService.approveTimeoff(timeoffRequest);
+    updateRequestStatus(id, 2);
   };
-
-  // Update the status of the request in the state
   const updateRequestStatus = (id, approvalCode) => {
     setPtoRequests((prevRequests) =>
       prevRequests.map((request) =>

@@ -218,12 +218,14 @@ const approveTimeoff = async (req, res) => {
   try {
     const { timeoffId, status } = req.body;
 
+    console.log("timeoffId", timeoffId);
+
     if (![1, 2].includes(status)) {
       return res.status(400).json({ message: "Invalid status value" });
     }
 
     const updated = await Timeoff.update(
-      { approval_status: status },
+      { approval: status },
       { where: { id: timeoffId } }
     );
 
