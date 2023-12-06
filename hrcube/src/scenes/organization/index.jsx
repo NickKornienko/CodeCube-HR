@@ -61,26 +61,39 @@ const Organization = () => {
     event.preventDefault();
     setIsSubmitted(false);
     setErrorMsg("");
+
+    // Assuming startDate and endDate are Dayjs objects due to the use of AdapterDayjs
+    const formattedStartDate = startDate?.format("YYYY-MM-DD");
+    const formattedEndDate = endDate?.format("YYYY-MM-DD");
+
     const ptoRequestData = {
-      startDate: startDate?.toISOString(),
-      endDate: endDate?.toISOString(),
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
       user_comments: userComments,
     };
 
     try {
-      const response = await DbService.sendTimeoffData(ptoRequestData);
+      const response = await DbService.sendTimeoffData({
+        ...ptoRequestData,
+        startDate: startDate?.toISOString(),
+        endDate: endDate?.toISOString(),
+      });
+
       if (response.status === 201) {
         const { startDate: currentWeekStart, endDate: currentWeekEnd } =
           getCurrentWeek();
         if (
-          (ptoRequestData.startDate <= currentWeekEnd &&
-            ptoRequestData.startDate >= currentWeekStart) ||
-          (ptoRequestData.endDate >= currentWeekStart &&
-            ptoRequestData.endDate <= currentWeekEnd) ||
-          (ptoRequestData.startDate <= currentWeekStart &&
-            ptoRequestData.endDate >= currentWeekEnd)
+          (formattedStartDate <= currentWeekEnd &&
+            formattedStartDate >= currentWeekStart) ||
+          (formattedEndDate >= currentWeekStart &&
+            formattedEndDate <= currentWeekEnd) ||
+          (formattedStartDate <= currentWeekStart &&
+            formattedEndDate >= currentWeekEnd)
         ) {
-          setPtoRequests([...ptoRequests, ptoRequestData]);
+          setPtoRequests((currentPtoRequests) => [
+            ...currentPtoRequests,
+            response.data,
+          ]);
         }
 
         setStartDate(null);
