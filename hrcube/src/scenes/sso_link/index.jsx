@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import AuthService from "../../AuthService.js";
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { tokens } from "../../theme";
 
 const GOOGLE_CLIENT_ID = require("../../secrets.json").GOOGLE_CLIENT_ID;
 
 const SsoLinkPage = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const [isLinked, setIsLinked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
@@ -87,20 +91,77 @@ const SsoLinkPage = () => {
   }
 
   return (
+   
     <div>
-      <h1>Google Account Link</h1>
-      {isLinked ? (
-        <div>
-          <p>Your account is linked with Google.</p>
+       <Box  sx={{
+        width: "83vw",
+        mt:"30vh",
+
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+        <Box>
+        <Typography
+          variant="h3"
+          color={colors.primary[500]}
+          sx={{ m: "0 0 5px 0" }}
+          fontWeight="bold"
+        >
+          Google Account Link
+        </Typography>
+        </Box>
+
+        {isLinked ? (
+        <Box sx={{
+          width: "83vw",
+          mt:"30vh",
+  
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+          <Typography
+          variant="h4"
+          color={colors.primary[500]}
+          sx={{ m: "0 0 5px 0" }}
+
+        >
+          Your account is linked with Google.
+        </Typography>
           {googleEmail && <p>Google Account Email: {googleEmail}</p>}
-          <button onClick={handleUnlinkGoogle}>Unlink Google Account</button>
-        </div>
+          <button variant="contained"
+          color={colors.primary[500]}
+          type="submit"
+          sx={{ mt: 2 }}
+          width="500px" onClick={handleUnlinkGoogle}>Unlink Google Account</button>
+        </Box>
       ) : (
-        <div>
-          <p>Your account is not linked with Google.</p>
-          <button onClick={handleSignIn}>Link Google Account</button>
-        </div>
+        <Box>
+          <Typography
+          variant="h4"
+          color={colors.primary[500]}
+          sx={{ m: "0 0 5px 0" }}
+   
+        >
+          Your account is not linked with Google.
+        </Typography>
+          <button variant="contained"
+          color={colors.primary[500]}
+          type="submit"
+          sx={{ mt: 2 }}
+          onClick={handleSignIn}>Link Google Account</button>
+        </Box>
       )}
+
+
+      
+     
+      
+      </Box>
+      
     </div>
   );
 };

@@ -5,6 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
 import { tokens } from "../theme";
 import AuthService from "../AuthService.js";
+import { useNavigate } from "react-router-dom";
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -21,6 +22,10 @@ export default function AccountMenu() {
     AuthService.logout();
     window.location.reload();
     console.log("Logout successful");
+  };
+  const navigate = useNavigate();
+  const accountPage = () => {
+    navigate("/account");
   };
 
   return (
@@ -44,7 +49,7 @@ export default function AccountMenu() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={accountPage}>My account</MenuItem>
         <MenuItem
           onClick={() => {
             handleClose();

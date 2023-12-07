@@ -10,10 +10,15 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DbService from "../DbService.js";
 import AuthService from "../AuthService.js";
+import { Box,useTheme } from "@mui/material";
+import { tokens } from "../theme";
+import SendIcon from '@mui/icons-material/Send';
 
 const AlignItemsList = () => {
   const [tweets, setTweets] = useState([]);
   const [empNo, setEmpNo] = useState(null);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   useEffect(() => {
     AuthService.getUserInfo().then(
@@ -65,35 +70,51 @@ const AlignItemsList = () => {
           e.target.reset();
         }}
       >
-        <InputBase
+        <Box
+                display="flex"
+                backgroundColor={colors.purpleAccent[200]}
+                borderRadius="5px"
+                width="100%"
+              >
+                <InputBase
           name="tweetContent"
-          sx={{ ml: 2, flex: 1 }}
-          placeholder="What's happening?"
+          sx={{ ml: 2, flex: 1, color: colors.primary[600] }}
+          placeholder="Send a shout out tweet to your team!"
         />
-        <IconButton type="submit" sx={{ p: 1 }}>
-          <ExpandMoreIcon />
-        </IconButton>
+                <IconButton type="submit" sx={{ p: 1, color:colors.primary[200]}}>
+          <SendIcon />
+        </IconButton> </Box>
       </form>
 
-      <List sx={{ width: "100%", maxWidth: "90%" }}>
+      <List sx={{ width: "100%", maxWidth: "100%",color:colors.primary[600] }}>
         {tweets.map((tweet) => (
           <React.Fragment key={tweet.tweetId}>
             <ListItem alignItems="flex-start">
               <ListItemText
-                primary={tweet.emp_name}
+                primary={<Typography
+                variant="h5"
+                color="text.primary"
+                fontWeight="bold"
+                sx={{color:colors.primary[600]}}
+              >
+                {tweet.emp_name}
+              </Typography>}
                 secondary={
                   <Typography
                     component="span"
                     variant="body2"
                     color="text.primary"
+                    sx={{color:colors.primary[600]}}
                   >
                     {tweet.content}
                   </Typography>
                 }
+  
               />
               {/* Only show the delete button if the emp_no matches */}
               {empNo === tweet.emp_no && (
                 <IconButton
+                sx={{color:colors.primary[200]}}
                   onClick={() => handleDeleteTweet(tweet.tweetId)}
                   edge="end"
                   aria-label="delete"
@@ -102,7 +123,7 @@ const AlignItemsList = () => {
                 </IconButton>
               )}
             </ListItem>
-            <Divider />
+            <Divider variant="fullWidth" sx={{ bgcolor: 'grey' }} />
           </React.Fragment>
         ))}
       </List>

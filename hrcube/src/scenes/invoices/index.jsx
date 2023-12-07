@@ -7,6 +7,7 @@ import DbService from "../../DbService";
 import Header from "../../components/Header";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 
 const Invoices = () => {
   const theme = useTheme();
@@ -77,26 +78,88 @@ const Invoices = () => {
       <Header />
       {/* Timesheet Submission Form */}
       <Box m="20px">
-        <Typography variant="h4" color={colors.primary[400]} sx={{ mb: 2 }}>
+      <Typography
+          variant="h3"
+          color={colors.primary[500]}
+          sx={{ m: "0 0 5px 0" }}
+        >
           Submit Hours Worked
         </Typography>
-        <TextField
-          label="Date"
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          sx={{ mr: 2 }}
-        />
-        <TextField
-          label="Hours Worked"
-          type="number"
-          value={hours}
-          onChange={(e) => setHours(e.target.value)}
-          sx={{ mr: 2 }}
-        />
+       <Box m="20px"
+       >
+         <TextField
+  
+  type="date"
+  value={date}
+  onChange={(e) => setDate(e.target.value)}
+  sx={{
+    mr: 2,
+    
+    '& label.Mui-focused': {
+      color: colors.primary[500], // color when the input is focused
+    },
+    '& label': {
+      color: 'rgba(0, 0, 0, 0.54)', // default label color
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: colors.primary[500], // color of the underline when input is focused
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'rgba(0, 0, 0, 0.23)', // default border color
+      },
+      '&:hover fieldset': {
+        borderColor: 'rgba(0, 0, 0, 0.87)', // border color when hovered
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: colors.primary[500], // border color when the input is focused
+      },
+    },
+    '& .MuiInputBase-input': { // This targets the input inside the TextField
+      color: colors.primary[500], // input text color
+    },
+  }}
+/>
+<TextField
+  label="Hours Worked"
+  type="number"
+  value={hours}
+  onChange={(e) => setHours(e.target.value)}
+  sx={{
+    mr: 2,
+    alignContent: "center",
+    width:"120px",
+    '& label.Mui-focused': {
+      color: colors.primary[500], // color when the input is focused
+    },
+    '& label': {
+      color: 'rgba(0, 0, 0, 0.54)', // default label color
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: colors.primary[500], // color of the underline when input is focused
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'rgba(0, 0, 0, 0.23)', // default border color
+      },
+      '&:hover fieldset': {
+        borderColor: 'rgba(0, 0, 0, 0.87)', // border color when hovered
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: colors.primary[500], // border color when the input is focused
+      },
+    },
+    '& .MuiInputBase-input': { // This targets the input inside the TextField
+      color: colors.primary[500], // input text color
+    },
+  }}
+/>
+       </Box>
+        <Box m="20px">
         <Button variant="contained" color="primary" onClick={handleSubmit}>
           Submit
         </Button>
+        </Box>
       </Box>
       {/* Timesheet Display */}
       <Box m="20px">
@@ -116,30 +179,61 @@ const Invoices = () => {
         m="0px 40px 20px 40px"
         p="25px 40px 25px 40px"
       >
+        <Box
+            display="flex"
+            justifyContent="space-between"
+            width="100%"
+            mb="10px"
+          >
+            <Box width="30%">
+            <Typography fontWeight="bold" color={colors.primary[500]}>
+              Date
+            </Typography>
+            
+            </Box>
+            <Typography fontWeight="bold" color={colors.primary[500]}>
+              Hours
+            </Typography>
+            <Typography fontWeight="bold" color={colors.primary[500]}>
+              Department #
+            </Typography>
+            <Typography fontWeight="bold" color={colors.primary[500]}>
+              Employee #
+            </Typography>
+            
+            <Typography fontWeight="bold" color={colors.primary[500]}>
+              Manager
+            </Typography>
+          </Box>
         {timesheets.map((timesheet, index) => (
           <Box
             key={index}
             display="flex"
             justifyContent="space-between"
             width="100%"
+            mb="10px"
           >
+            <Box width="30%">
             <Typography color={colors.primary[500]}>
-              {timesheet.date}
+              {timesheet.date} </Typography>
+            </Box>
+            <Typography color={colors.primary[500]}>
+              {timesheet.no_hours}
             </Typography>
+           
             <Typography color={colors.primary[500]}>
               {timesheet.dept_no}
             </Typography>
             <Typography color={colors.primary[500]}>
               {timesheet.emp_no}
             </Typography>
-            <Typography color={colors.primary[500]}>
-              {timesheet.no_hours}
-            </Typography>
+            
             <Typography color={colors.primary[500]}>
               {timesheet.manager_emp_no}
             </Typography>
           </Box>
         ))}
+        <Divider variant="fullWidth" sx={{ bgcolor: 'grey' }} />
       </Box>
     </Box>
   );

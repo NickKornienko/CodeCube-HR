@@ -129,7 +129,7 @@ const Dashboard = () => {
                 backgroundColor={colors.white}
                 boxShadow={theme.shadows[2]}
                 borderRadius="15px"
-                height="500px"
+                height="470px"
               >
                 <Box
                   mt="25px"
@@ -182,21 +182,6 @@ const Dashboard = () => {
           <Box backgroundColor={colors.white} height="92vh" overflow="auto">
             <Box p="20px">
               {/* SEARCH BAR */}
-              <Box
-                display="flex"
-                backgroundColor={colors.purpleAccent[200]}
-                borderRadius="5px"
-                width="100%"
-              >
-                <InputBase
-                  sx={{ ml: 2, flex: 1 }}
-                  placeholder="Give a shoutout"
-                  color={colors.white}
-                />
-                <IconButton type="button" sx={{ p: 1 }}>
-                  <ExpandMoreIcon />
-                </IconButton>
-              </Box>
               <AlignItemsList></AlignItemsList>
             </Box>
           </Box>

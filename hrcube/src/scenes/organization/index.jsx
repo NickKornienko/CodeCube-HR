@@ -5,7 +5,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import DbService from "../../DbService.js";
 import Header from "../../components/Header";
 import { tokens } from "../../theme";
-
+import Divider from "@mui/material/Divider";
 const Organization = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -26,6 +26,18 @@ const Organization = () => {
         console.error("Error fetching PTO requests:", error);
       });
   }, []);
+  const getStatusLabel = (approvalCode) => {
+    switch (approvalCode) {
+      case 0:
+        return "Pending";
+      case 1:
+        return <Typography color={colors.greenAccent}> Approved </Typography>;
+      case 2:
+        return "Denied";
+      default:
+        return "Unknown";
+    }
+  };
 
   const getCurrentWeek = () => {
     const currentDate = new Date();
@@ -121,11 +133,12 @@ const Organization = () => {
         </Typography>
       </Box>
       <Box
-        m="20px"
+        ml="40px"
+        mt="20px"
         component="form"
         onSubmit={handlePTORequestSubmit}
-        width="65%"
-        display="flex"
+        width="85%"
+        display="space-between"
         flexDirection="column"
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -136,6 +149,33 @@ const Organization = () => {
             slots={{
               TextField: (params) => <TextField {...params} />,
             }}
+            sx={{
+              mr: 2,
+              
+              '& label.Mui-focused': {
+                color: colors.primary[500], // color when the input is focused
+              },
+              '& label': {
+                color: 'rgba(0, 0, 0, 0.54)', // default label color
+              },
+              '& .MuiInput-underline:after': {
+                borderBottomColor: colors.primary[500], // color of the underline when input is focused
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'rgba(0, 0, 0, 0.23)', // default border color
+                },
+                '&:hover fieldset': {
+                  borderColor: 'rgba(0, 0, 0, 0.87)', // border color when hovered
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: colors.primary[500], // border color when the input is focused
+                },
+              },
+              '& .MuiInputBase-input': { // This targets the input inside the TextField
+                color: colors.primary[500], // input text color
+              },
+            }}
           />
           <DatePicker
             label="Vacation End Date"
@@ -144,14 +184,77 @@ const Organization = () => {
             slots={{
               TextField: (params) => <TextField {...params} />,
             }}
+            sx={{
+              mr: 2,
+              
+              '& label.Mui-focused': {
+                color: colors.primary[500], // color when the input is focused
+              },
+              '& label': {
+                color: 'rgba(0, 0, 0, 0.54)', // default label color
+              },
+              '& .MuiInput-underline:after': {
+                borderBottomColor: colors.primary[500], // color of the underline when input is focused
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'rgba(0, 0, 0, 0.23)', // default border color
+                },
+                '&:hover fieldset': {
+                  borderColor: 'rgba(0, 0, 0, 0.87)', // border color when hovered
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: colors.primary[500], // border color when the input is focused
+                },
+              },
+              '& .MuiInputBase-input': { // This targets the input inside the TextField
+                color: colors.primary[500], // input text color
+              },
+            }}
           />
         </LocalizationProvider>
         <TextField
           id="comments-field"
+          
           label="Additional Comments"
           value={userComments}
           onChange={(e) => setUserComments(e.target.value)}
+          sx={{
+            mr: 2,
+            width:"30%",
+            '& label.Mui-focused': {
+              color: colors.primary[500], // color when the input is focused
+            },
+            '& label': {
+              color: 'rgba(0, 0, 0, 0.54)', // default label color
+            },
+            '& .MuiInput-underline:after': {
+              borderBottomColor: colors.primary[500], // color of the underline when input is focused
+            },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: 'rgba(0, 0, 0, 0.23)', // default border color
+              },
+              '&:hover fieldset': {
+                borderColor: 'rgba(0, 0, 0, 0.87)', // border color when hovered
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: colors.primary[500], // border color when the input is focused
+              },
+            },
+            '& .MuiInputBase-input': { // This targets the input inside the TextField
+              color: colors.primary[500], // input text color
+            },
+          }}
         />
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          sx={{ mt: 2 }}
+        >
+          Request
+        </Button>
         {isSubmitted && (
           <Typography color={theme.palette.success.main} sx={{ mt: 2 }}>
             Your PTO request has been submitted successfully.
@@ -162,14 +265,6 @@ const Organization = () => {
             {errorMsg}
           </Typography>
         )}
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          sx={{ mt: 2 }}
-        >
-          Request
-        </Button>
       </Box>
 
       {/* Section to display PTO requests */}
@@ -183,23 +278,49 @@ const Organization = () => {
           borderRadius="15px"
           m="20px"
           p="20px"
+          height="300px"
         >
-          {ptoRequests.map((request, index) => (
-            <Box key={index} display="flex" justifyContent="space-between">
-              <Typography color={colors.primary[500]}>
-                Start: {request.start_date}
+          <Box mb="10px" display="flex" justifyContent="space-between">
+ <Typography color={colors.primary[500]} fontWeight={"bold"}>
+                Start
               </Typography>
-              <Typography color={colors.primary[500]}>
-                End: {request.end_date}
+              <Typography color={colors.primary[500]} fontWeight={"bold"}>
+                End
               </Typography>
-              <Typography color={colors.primary[500]}>
-                Comments: {request.user_comments}
+              <Typography color={colors.primary[500]} fontWeight={"bold"}>
+                Comments
               </Typography>
-              <Typography color={colors.primary[500]}>
-                Approval: {request.approval}
+              <Typography color={colors.primary[500]} fontWeight={"bold"}>
+                Approval
               </Typography>
             </Box>
+          {ptoRequests.map((request, index) => (
+            <Box key={index} display="flex" justifyContent="space-between">
+              <Box width="120px">
+                <Typography color={colors.primary[500]}>
+                  {request.start_date}
+                </Typography>
+              </Box>
+              <Box width="110px">
+                <Typography color={colors.primary[500]}>
+                  {request.end_date}
+                </Typography>
+              </Box>
+              <Box width="180px">
+                <Typography color={colors.primary[500]}>
+                  {request.user_comments}
+                </Typography>
+              </Box>
+              <Box >
+                <Typography color={colors.primary[500]}>
+                  {getStatusLabel(request.approval)}
+                  
+                </Typography>
+              </Box>     
+            </Box>
           ))}
+          
+           
         </Box>
       </Box>
     </Box>

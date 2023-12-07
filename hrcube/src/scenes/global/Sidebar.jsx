@@ -131,14 +131,6 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title="FAQ Page"
-              to="/faq"
-              icon={<HelpOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
             {isManager && (
               <Item
                 title="Approvals"
@@ -148,6 +140,15 @@ const Sidebar = () => {
                 setSelected={setSelected}
               />
             )}
+            <Item
+              title="FAQ Page"
+              to="/faq"
+              icon={<HelpOutlineOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            
           </Box>
         </Menu>
       </ProSidebar>

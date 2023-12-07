@@ -60,12 +60,13 @@ const Topbar = () => {
 
       {/* ICONS */}
 
-      {/* Google SSO Link Icon (temp)*/}
+    
+
+      <Box display="flex" alignItems="center">
+         {/* Google SSO Link Icon (temp)*/}
       <IconButton onClick={handleLinkGoogleAccount}>
         <GoogleIcon color="primary" />
       </IconButton>
-
-      <Box display="flex" alignItems="center">
         <IconButton>
           <EmailOutlinedIcon color="primary" />
         </IconButton>
@@ -80,7 +81,7 @@ const Topbar = () => {
 
         {/* The Typography component is wrapped in a Box with flex properties for alignment */}
         <Box display="flex" alignItems="center" height="100%">
-          <Typography variant="h6" style={{ lineHeight: "1" }}>
+          <Typography variant="h5" color={colors.primary[500]} style={{ lineHeight: "1",  }}>
             {userName}
           </Typography>
         </Box>
