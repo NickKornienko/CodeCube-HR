@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import AuthService from "../../AuthService.js";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 
 const GOOGLE_CLIENT_ID = require("../../secrets.json").GOOGLE_CLIENT_ID;
@@ -13,15 +13,13 @@ const SsoLinkPage = () => {
   const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
   const [googleEmail, setGoogleEmail] = useState(null);
 
-  // useCallback for initGoogleSignIn
   const initGoogleSignIn = useCallback(() => {
     window.google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       callback: handleSignInResponse,
     });
-  }, []); // No dependencies
+  }, []);
 
-  // useCallback for loadGoogleScript
   const loadGoogleScript = useCallback(() => {
     const script = document.createElement("script");
     script.src = "https://accounts.google.com/gsi/client";
@@ -30,7 +28,7 @@ const SsoLinkPage = () => {
       initGoogleSignIn();
     };
     document.body.appendChild(script);
-  }, [initGoogleSignIn]); // initGoogleSignIn as a dependency
+  }, [initGoogleSignIn]);
 
   useEffect(() => {
     const checkLinkStatus = async () => {
@@ -91,78 +89,68 @@ const SsoLinkPage = () => {
   }
 
   return (
-   
-    <div>
-       <Box  sx={{
-        width: "83vw",
-        mt:"30vh",
-
+    <Box
+      sx={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        alignItems: "flex-start", // Align items to the start (left)
         justifyContent: "center",
-      }}>
-        <Box>
-        <Typography
-          variant="h3"
-          color={colors.primary[500]}
-          sx={{ m: "0 0 5px 0" }}
-          fontWeight="bold"
-        >
-          Google Account Link
-        </Typography>
-        </Box>
+        width: "100%", // Set width to full container width
+        mt: 2, // Adjust top margin as needed
+        mb: 2, // Adjust bottom margin as needed
+      }}
+    >
+      <Typography variant="h6" color={colors.primary[500]} fontWeight="bold">
+        Google Account Link
+      </Typography>
 
-        {isLinked ? (
-        <Box sx={{
-          width: "83vw",
-          mt:"30vh",
-  
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}>
-          <Typography
-          variant="h4"
-          color={colors.primary[500]}
-          sx={{ m: "0 0 5px 0" }}
-
+      {isLinked ? (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            mt: 1,
+          }}
         >
-          Your account is linked with Google.
-        </Typography>
+          <Typography variant="body1" color={colors.primary[500]}>
+            Your account is linked with Google.
+          </Typography>
           {googleEmail && <p>Google Account Email: {googleEmail}</p>}
-          <button variant="contained"
-          color={colors.primary[500]}
-          type="submit"
-          sx={{ mt: 2 }}
-          width="500px" onClick={handleUnlinkGoogle}>Unlink Google Account</button>
+          <button
+            variant="contained"
+            color={colors.primary[500]}
+            type="submit"
+            sx={{ mt: 1 }}
+            onClick={handleUnlinkGoogle}
+          >
+            Unlink Google Account
+          </button>
         </Box>
       ) : (
-        <Box>
-          <Typography
-          variant="h4"
-          color={colors.primary[500]}
-          sx={{ m: "0 0 5px 0" }}
-   
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            mt: 1,
+          }}
         >
-          Your account is not linked with Google.
-        </Typography>
-          <button variant="contained"
-          color={colors.primary[500]}
-          type="submit"
-          sx={{ mt: 2 }}
-          onClick={handleSignIn}>Link Google Account</button>
+          <Typography variant="body1" color={colors.primary[500]}>
+            Your account is not linked with Google.
+          </Typography>
+          <button
+            variant="contained"
+            color={colors.primary[500]}
+            type="submit"
+            sx={{ mt: 1 }}
+            onClick={handleSignIn}
+          >
+            Link Google Account
+          </button>
         </Box>
       )}
-
-
-      
-     
-      
-      </Box>
-      
-    </div>
+    </Box>
   );
 };
 

@@ -9,7 +9,6 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import GoogleIcon from "@mui/icons-material/Google";
-import { useNavigate } from "react-router-dom";
 import AuthService from "../../AuthService.js";
 import AccountMenu from "../../components/AccountMenu";
 
@@ -17,11 +16,6 @@ const Topbar = () => {
   const [userName, setUserName] = useState("Loading...");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const colorMode = useContext(ColorModeContext);
-  const navigate = useNavigate();
-  const handleLinkGoogleAccount = () => {
-    navigate("/sso_link");
-  };
 
   useEffect(() => {
     AuthService.getUserInfo().then(
@@ -60,28 +54,14 @@ const Topbar = () => {
 
       {/* ICONS */}
 
-    
-
       <Box display="flex" alignItems="center">
-         {/* Google SSO Link Icon (temp)*/}
-      <IconButton onClick={handleLinkGoogleAccount}>
-        <GoogleIcon color="primary" />
-      </IconButton>
-        <IconButton>
-          <EmailOutlinedIcon color="primary" />
-        </IconButton>
-
-        <IconButton>
-          <NotificationsOutlinedIcon color="primary" />
-        </IconButton>
-
-        <IconButton>
-          <PersonOutlinedIcon color="primary" />
-        </IconButton>
-
         {/* The Typography component is wrapped in a Box with flex properties for alignment */}
         <Box display="flex" alignItems="center" height="100%">
-          <Typography variant="h5" color={colors.primary[500]} style={{ lineHeight: "1",  }}>
+          <Typography
+            variant="h5"
+            color={colors.primary[500]}
+            style={{ lineHeight: "1" }}
+          >
             {userName}
           </Typography>
         </Box>
