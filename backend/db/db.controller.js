@@ -6,6 +6,7 @@ const {
   Dept_emp,
   Dept_manager,
   Tweet,
+  Salary,
 } = require("./db");
 
 const secrets = require("../../secrets.json");
@@ -387,6 +388,39 @@ const createTimeoffRequest = async (req, res) => {
   }
 };
 
+const getSalaryForUser = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const empNo = await getEmpNoFromUserId(userId);
+
+    if (!empNo) {
+      return res.status(404).json({ message: "Employee number not found." });
+    }
+
+    const currentSalary = await Salary.findOne({
+      where: {
+        emp_no: empNo,
+        to_date: {
+          [Op.gte]: new Date(),
+        },
+      },
+      order: [["from_date", "DESC"]],
+      attributes: ["salary"],
+    });
+
+    console.log("currentSalary", currentSalary.dataValues.salary);
+
+    if (currentSalary) {
+      return res.json({ salary: currentSalary.dataValues.salary });
+    } else {
+      return res.status(404).json({ message: "Current salary not found." });
+    }
+  } catch (error) {
+    console.error("Error fetching current salary:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
+
 module.exports = {
   getTimesheetsForUser,
   createTimeSheetForUser,
@@ -397,4 +431,5 @@ module.exports = {
   postTweet,
   deleteTweet,
   getTweets,
+  getSalaryForUser,
 };

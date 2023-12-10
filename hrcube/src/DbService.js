@@ -14,6 +14,10 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+const getSalaryForUser = () => {
+  return axiosInstance.get("salary");
+};
+
 const getTimesheetsForUser = (startDate, endDate) => {
   return axiosInstance.get(
     `timesheets?startDate=${startDate}&endDate=${endDate}`
@@ -62,6 +66,7 @@ const DbService = {
   postTweet,
   deleteTweet,
   getTweets,
+  getSalaryForUser,
 };
 
 export default DbService;

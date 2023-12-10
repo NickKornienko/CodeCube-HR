@@ -12,5 +12,6 @@ router.post("/approve-timeoff", dbController.approveTimeoff);
 router.post("/post-tweet", dbController.postTweet);
 router.delete("/delete-tweet/:tweetId", dbController.deleteTweet);
 router.post("/get-tweets", dbController.getTweets);
+router.get("/salary", dbController.getSalaryForUser);
 
 module.exports = router;

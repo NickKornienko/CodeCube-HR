@@ -97,21 +97,19 @@ const login = async (req, res) => {
   }
 };
 
-// Authenticate Google token
 const authenticateWithGoogle = async (token) => {
   try {
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: GOOGLE_CLIENT_ID,
     });
-    return ticket.getPayload(); // Contains user info from Google
+    return ticket.getPayload();
   } catch (error) {
     console.error("Error verifying Google token: ", error);
     throw new Error("Invalid Google token");
   }
 };
 
-// Function to handle login with Google
 const handleLoginWithGoogle = async (req, res) => {
   const { token } = req.body;
 
@@ -125,7 +123,6 @@ const handleLoginWithGoogle = async (req, res) => {
       });
     }
 
-    // Generate a token for the user
     const jwtToken = jwt.sign({ userId: user.userId }, jwtSecret, {
       expiresIn: "24h",
     });
@@ -136,7 +133,6 @@ const handleLoginWithGoogle = async (req, res) => {
   }
 };
 
-// Function to check if Google account is linked
 const isGoogleLinked = async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ message: "User not authenticated" });
@@ -157,7 +153,6 @@ const isGoogleLinked = async (req, res) => {
   }
 };
 
-// Function to unlink Google account
 const unlinkGoogleAccount = async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ message: "Not authenticated" });
@@ -171,7 +166,6 @@ const unlinkGoogleAccount = async (req, res) => {
   res.status(200).json({ message: "Google account unlinked successfully" });
 };
 
-// Function to link new Google account
 const linkGoogleAccount = async (req, res) => {
   const { token } = req.body;
 
