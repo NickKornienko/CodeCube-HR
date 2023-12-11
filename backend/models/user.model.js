@@ -1,3 +1,5 @@
+const bcrypt = require("bcrypt");
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define("User", {
     username: {
@@ -22,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    googleEmail: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   });
 
   User.associate = function (models) {
@@ -29,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "employee_id",
       as: "employee",
     });
+  };
+
+  User.prototype.comparePassword = async function (candidatePassword) {
+    return bcrypt.compare(candidatePassword, this.password);
   };
 
   return User;

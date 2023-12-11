@@ -33,6 +33,8 @@ const getUserInfo = async (req, res) => {
       name: `${user.employee.first_name} ${user.employee.last_name}`,
       emp_no: user.employee.emp_no,
       isManager: !!isManager,
+      email: user.email,
+      googleEmail: user.googleEmail,
     });
   } catch (error) {
     console.error("Error retrieving user information:", error);
@@ -247,6 +249,30 @@ const loginWithGoogle = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+
+    const userId = req.user.userId;
+
+    const user = await User.findByPk(userId);
+
+    const isMatch = await user.comparePassword(oldPassword);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Incorrect old password" });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password successfully changed" });
+  } catch (error) {
+    console.error("Error changing password: ", error);
+    res.status(500).json({ message: "Error changing password" });
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -257,4 +283,5 @@ module.exports = {
   verifyGoogleToken,
   loginWithGoogle,
   getUserInfo,
+  changePassword,
 };
