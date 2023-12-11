@@ -33,6 +33,8 @@ const getUserInfo = async (req, res) => {
       name: `${user.employee.first_name} ${user.employee.last_name}`,
       emp_no: user.employee.emp_no,
       isManager: !!isManager,
+      email: user.email,
+      googleEmail: user.googleEmail,
     });
   } catch (error) {
     console.error("Error retrieving user information:", error);

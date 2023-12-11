@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    googleEmail: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   });
 
   User.associate = function (models) {
