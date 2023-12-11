@@ -68,6 +68,13 @@ const getUserInfo = () => {
   return axiosInstance.get("user-info");
 };
 
+const changePassword = (oldPassword, newPassword) => {
+  return axiosInstance.post("change-password", {
+    oldPassword,
+    newPassword,
+  });
+};
+
 const AuthService = {
   login,
   logout,
@@ -77,6 +84,7 @@ const AuthService = {
   linkGoogleAccount,
   loginWithGoogle,
   getUserInfo,
+  changePassword,
 };
 
 export default AuthService;

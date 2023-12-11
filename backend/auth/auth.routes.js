@@ -11,4 +11,6 @@ router.post("/unlink-google", authController.unlinkGoogleAccount);
 router.post("/verify-google-token", authController.verifyGoogleToken);
 router.post("/login-google", authController.loginWithGoogle);
 router.get("/user-info", authController.getUserInfo);
+router.post("/change-password", authController.changePassword);
+
 module.exports = router;
